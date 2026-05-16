@@ -1,0 +1,43 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace Vectra.Client.Configuration;
+
+/// <summary>
+/// Configuration options for the Vectra SDK HTTP client.
+/// </summary>
+/// <remarks>
+/// Register via <c>services.AddVectraClient(options => { ... })</c>.
+/// </remarks>
+public sealed class VectraClientOptions
+{
+    /// <summary>
+    /// Gets or sets the base URL of the Vectra gateway (e.g. <c>http://localhost:7080</c>).
+    /// </summary>
+    /// <remarks>
+    /// A trailing slash is automatically normalised. This property is required.
+    /// </remarks>
+    [Required]
+    public required string BaseUrl { get; set; }
+
+    /// <summary>
+    /// Gets or sets an optional static Bearer token to attach to every outgoing request.
+    /// </summary>
+    /// <remarks>
+    /// When set, the SDK injects this value as the <c>Authorization: Bearer &lt;token&gt;</c>
+    /// header automatically. Leave <see langword="null"/> to manage authentication manually
+    /// or to use <see cref="IVectraTokenClientFactory"/> for per-request tokens.
+    /// </remarks>
+    public string? BearerToken { get; set; }
+
+    /// <summary>
+    /// Gets or sets the request timeout. Defaults to 30 seconds.
+    /// </summary>
+    public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(30);
+
+    /// <summary>
+    /// Gets or sets whether to throw a <see cref="Vectra.Client.Exceptions.VectraApiException"/>
+    /// automatically when the server returns a non-success HTTP status code.
+    /// Defaults to <see langword="true"/>.
+    /// </summary>
+    public bool ThrowOnError { get; set; } = true;
+}

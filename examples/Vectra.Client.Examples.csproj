@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<OutputType>Exe</OutputType>
+	<TargetFramework>net10.0</TargetFramework>
+	<Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<RootNamespace>Vectra.Client.Examples</RootNamespace>
+	<AssemblyName>Vectra.Client.Net.Examples</AssemblyName>
+	<Title>Vectra SDK for .NET — Examples</Title>
+	<Description>Runnable examples demonstrating every feature of the Vectra.Client.Net client library.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
+	<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.5" />
+	<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\Vectra.Client\Vectra.Client.csproj" />
+  </ItemGroup>
+
+</Project>

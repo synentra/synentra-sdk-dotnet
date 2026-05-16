@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>net10.0</TargetFramework>
+	<Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<NoWarn>$(NoWarn);1591</NoWarn>
+	<Title>Vectra SDK for .NET</Title>
+	<Description>Official .NET client SDK for the Vectra Intent-Aware Governance Gateway. Provides strongly-typed access to the Vectra API including agent management, policy evaluation, HITL workflows, and token authentication.</Description>
+	<Authors>Cortexium Labs</Authors>
+	<Company>Cortexium Labs</Company>
+	<Copyright>© Cortexium Labs. All rights reserved.</Copyright>
+	<PackageId>Vectra.Client.Net</PackageId>
+	<PackageTags>vectra;ai-governance;agent;sdk;cortexium</PackageTags>
+	<RepositoryUrl>https://github.com/cortexiumlabs/vectra</RepositoryUrl>
+	<PackageProjectUrl>https://cortexiumlabs.com/products/vectra</PackageProjectUrl>
+	<RepositoryType>git</RepositoryType>
+	<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+	<RootNamespace>Vectra.Client</RootNamespace>
+	<AssemblyName>Vectra.Client.Net</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.5" />
+	<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.5" />
+  </ItemGroup>
+
+</Project>
