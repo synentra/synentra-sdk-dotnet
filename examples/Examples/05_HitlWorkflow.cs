@@ -31,7 +31,7 @@ public sealed class HitlWorkflowExample(IVectraClient vectra)
         // ── 1. Get all pending requests ───────────────────────────────────────
         Section("1. List all pending HITL requests");
 
-        var pending = await vectra.Hitl.GetAllPendingAsync(ct);
+        var pending = await vectra.Hitl.GetAllPendingAsync(page: 1, pageSize: 10, ct);
 
         if (pending.Count == 0)
         {
@@ -101,7 +101,7 @@ public sealed class HitlWorkflowExample(IVectraClient vectra)
         Section("4. Deny a pending request");
 
         // Re-fetch in case the approve consumed the first one
-        var remaining = await vectra.Hitl.GetAllPendingAsync(ct);
+        var remaining = await vectra.Hitl.GetAllPendingAsync(page: 1, pageSize: 10, ct);
 
         if (remaining.Count > 0)
         {

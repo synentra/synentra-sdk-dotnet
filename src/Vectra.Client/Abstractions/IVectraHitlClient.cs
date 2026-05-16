@@ -10,9 +10,13 @@ public interface IVectraHitlClient
     /// <summary>
     /// Retrieves all HITL requests currently awaiting human review.
     /// </summary>
+    /// <param name="page">The page number to retrieve.</param>
+    /// <param name="pageSize">The number of items per page.</param>
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
     /// <returns>A read-only list of pending HITL requests.</returns>
     Task<IReadOnlyList<PendingHitlRequest>> GetAllPendingAsync(
+        int page = 1,
+        int pageSize = 25,
         CancellationToken cancellationToken = default);
 
     /// <summary>

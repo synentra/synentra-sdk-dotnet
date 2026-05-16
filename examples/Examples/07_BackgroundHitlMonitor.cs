@@ -96,7 +96,7 @@ public sealed class HitlMonitor(
         {
             try
             {
-                var pending = await vectra.Hitl.GetAllPendingAsync(ct);
+                var pending = await vectra.Hitl.GetAllPendingAsync(page: 1, pageSize: 10, cancellationToken: ct);
 
                 // Detect and emit new arrivals
                 foreach (var req in pending)

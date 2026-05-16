@@ -16,8 +16,8 @@ using Vectra.Client.Extensions;
 // ╚═════════════════════════════════════════════════════════════════╝
 
 const string GatewayUrl   = "http://localhost:7080";
-const string BearerToken  = "";           // leave empty to auth via example 02
-const string AgentSecret  = "changeme";   // used by auth + lifecycle examples
+const string BearerToken  = "";                 // leave empty to auth via example 02
+const string AgentSecret  = "supersecret";      // used by auth + lifecycle examples
 
 // ── Host / DI setup ────────────────────────────────────────────────────────────
 var host = Host.CreateDefaultBuilder(args)

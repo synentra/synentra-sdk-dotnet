@@ -20,9 +20,11 @@ internal sealed class HitlClient : IVectraHitlClient
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<PendingHitlRequest>> GetAllPendingAsync(
+        int page = 1,
+        int pageSize = 25,
         CancellationToken cancellationToken = default)
     {
-        var response = await _http.GetAsync("Hitls", cancellationToken);
+        var response = await _http.GetAsync($"Hitls?page={page}&pageSize={pageSize}", cancellationToken);
         var paged = await response.ReadAsAsync<PagedResult<PendingHitlRequest>>(cancellationToken);
         return paged.Items;
     }

@@ -48,7 +48,7 @@ public sealed class QuickStartExample(IVectraClient vectra)
         }
 
         // ── 3. HITL queue depth ───────────────────────────────────────────────
-        var pending = await vectra.Hitl.GetAllPendingAsync(ct);
+        var pending = await vectra.Hitl.GetAllPendingAsync(page: 1, pageSize: 10, ct);
 
         Section("HITL Queue");
         Out($"  Pending reviews: {pending.Count}");
