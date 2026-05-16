@@ -5,5 +5,7 @@
   <Folder Name="/src/">
     <Project Path="src/Vectra.Client/Vectra.Client.csproj" />
   </Folder>
-  <Folder Name="/tests/" />
+  <Folder Name="/tests/">
+    <Project Path="tests/Vectra.Client.UnitTests/Vectra.Client.UnitTests.csproj" Id="c9d2a84f-cfa4-4cc3-9acf-cd96de8aba93" />
+  </Folder>
 </Solution>
