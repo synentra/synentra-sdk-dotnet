@@ -24,8 +24,7 @@ public sealed class VectraClientOptions
     /// </summary>
     /// <remarks>
     /// When set, the SDK injects this value as the <c>Authorization: Bearer &lt;token&gt;</c>
-    /// header automatically. Leave <see langword="null"/> to manage authentication manually
-    /// or to use <see cref="IVectraTokenClientFactory"/> for per-request tokens.
+    /// header automatically. Leave <see langword="null"/> to manage authentication manually.
     /// </remarks>
     public string? BearerToken { get; set; }
 
