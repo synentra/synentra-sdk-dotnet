@@ -1,7 +1,5 @@
 # Vectra SDK for .NET
 
-[![NuGet](https://img.shields.io/nuget/v/Vectra.Client.Net.svg)](https://www.nuget.org/packages/Vectra.Client.Net)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/Vectra.Client.Net.svg)](https://www.nuget.org/packages/Vectra.Client.Net)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/cortexiumlabs/vectra-sdk-dotnet/blob/main/LICENSE)
 [![.NET 10](https://img.shields.io/badge/.NET-10.0-purple.svg)](https://dotnet.microsoft.com/download/dotnet/10.0)
 
