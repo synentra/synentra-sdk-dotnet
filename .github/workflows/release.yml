@@ -39,7 +39,7 @@ jobs:
         run: dotnet restore ${{ env.PROJECT_PATH }}
 
       - name: Build
-        run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release --no-restore -p:Version=${{ env.RELEASE_VERSION }}
+        run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release --no-restore -p:Version=${{ env.RELEASE_VERSION }} -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
 
       - name: Test
         run: dotnet test ${{ env.TEST_PROJECT_PATH }} --configuration Release --no-build
