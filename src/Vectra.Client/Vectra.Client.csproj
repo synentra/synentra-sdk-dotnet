@@ -16,7 +16,6 @@
 	<RepositoryUrl>https://github.com/cortexiumlabs/vectra-sdk-dotnet</RepositoryUrl>
 	<PackageProjectUrl>https://cortexiumlabs.com/products/vectra</PackageProjectUrl>
 	<RepositoryType>git</RepositoryType>
-	<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 	<RootNamespace>Vectra.Client</RootNamespace>
 	<AssemblyName>Vectra.Client.Net</AssemblyName>
 
@@ -31,9 +30,11 @@
 	<PackageTags>vectra;ai-governance;agent;sdk;cortexium;hitl;policy;ai-safety;llm;autonomous-agents;dotnet</PackageTags>
 
 	<!-- Source Link / deterministic builds -->
+	<DebugType>portable</DebugType>
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<Deterministic>true</Deterministic>
+	<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <ItemGroup>
