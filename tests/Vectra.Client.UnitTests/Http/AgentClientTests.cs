@@ -178,4 +178,29 @@ public sealed class AgentClientTests
         await act.Should().ThrowAsync<VectraAuthenticationException>()
             .Where(e => e.StatusCode == 403);
     }
+
+    [Fact]
+    public async Task LiftQuarantineAsync_SendsPostRequest()
+    {
+        var agentId = Guid.NewGuid();
+        var handler = new MockHttpMessageHandler(HttpStatusCode.NoContent);
+        var sut = new AgentClient(CreateClient(handler));
+
+        await sut.LiftQuarantineAsync(agentId);
+
+        handler.Requests[0].Method.Should().Be(HttpMethod.Post);
+        handler.Requests[0].RequestUri!.ToString().Should().Contain(agentId.ToString());
+        handler.Requests[0].RequestUri!.ToString().Should().Contain("lift-quarantine");
+    }
+
+    [Fact]
+    public async Task LiftQuarantineAsync_ThrowsVectraApiException_On500()
+    {
+        var handler = new MockHttpMessageHandler(HttpStatusCode.InternalServerError, "err");
+        var sut = new AgentClient(CreateClient(handler));
+
+        var act = () => sut.LiftQuarantineAsync(Guid.NewGuid());
+
+        await act.Should().ThrowAsync<VectraApiException>();
+    }
 }

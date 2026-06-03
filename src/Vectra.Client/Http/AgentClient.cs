@@ -76,4 +76,17 @@ internal sealed class AgentClient : IVectraAgentClient
 
         await response.EnsureSuccessAsync(cancellationToken);
     }
+
+    /// <inheritdoc />
+    public async Task LiftQuarantineAsync(
+        Guid agentId,
+        CancellationToken cancellationToken = default)
+    {
+        var response = await _http.PostAsync(
+            $"Agents/{agentId}/lift-quarantine",
+            content: null,
+            cancellationToken);
+
+        await response.EnsureSuccessAsync(cancellationToken);
+    }
 }

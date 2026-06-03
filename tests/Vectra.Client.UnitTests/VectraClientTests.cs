@@ -47,6 +47,8 @@ public sealed class VectraClientTests
             => Task.CompletedTask;
         public Task DeleteAsync(Guid agentId, CancellationToken cancellationToken = default)
             => Task.CompletedTask;
+        public Task LiftQuarantineAsync(Guid agentId, CancellationToken cancellationToken = default)
+            => Task.CompletedTask;
     }
 
     private sealed class StubPolicyClient : IVectraPolicyClient
