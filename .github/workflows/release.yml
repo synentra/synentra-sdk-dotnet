@@ -60,7 +60,7 @@ jobs:
 
       - name: Authenticate with NuGet (Trusted Publishing)
         id: nuget-login
-        uses: NuGet/login@v1
+        uses: NuGet/login@b6c0a6a2b3f4d1c2e0a7c9d1f6c8b2d9f3a1e4c7
         with:
           user: ${{ secrets.NUGET_USERNAME }}
 
