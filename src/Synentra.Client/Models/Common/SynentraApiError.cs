@@ -1,9 +1,9 @@
-namespace Vectra.Client.Models.Common;
+namespace Synentra.Client.Models.Common;
 
 /// <summary>
-/// Represents a structured error response returned by the Vectra API.
+/// Represents a structured error response returned by the Synentra API.
 /// </summary>
-public sealed class VectraApiError
+public sealed class SynentraApiError
 {
     /// <summary>Gets the human-readable error message.</summary>
     public string Message { get; init; } = string.Empty;

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Vectra.Client.Models.Tokens;
+namespace Synentra.Client.Models.Tokens;
 
 /// <summary>
 /// The request body used to exchange agent credentials for a JWT access token.

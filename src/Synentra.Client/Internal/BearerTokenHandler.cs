@@ -1,18 +1,18 @@
 using System.Net.Http.Headers;
-using Vectra.Client.Configuration;
+using Synentra.Client.Configuration;
 using Microsoft.Extensions.Options;
 
-namespace Vectra.Client.Internal;
+namespace Synentra.Client.Internal;
 
 /// <summary>
 /// A <see cref="DelegatingHandler"/> that attaches a static Bearer token from
-/// <see cref="VectraClientOptions.BearerToken"/> to every outgoing request.
+/// <see cref="SynentraClientOptions.BearerToken"/> to every outgoing request.
 /// </summary>
 internal sealed class BearerTokenHandler : DelegatingHandler
 {
-    private readonly IOptionsMonitor<VectraClientOptions> _options;
+    private readonly IOptionsMonitor<SynentraClientOptions> _options;
 
-    public BearerTokenHandler(IOptionsMonitor<VectraClientOptions> options)
+    public BearerTokenHandler(IOptionsMonitor<SynentraClientOptions> options)
     {
         _options = options;
     }

@@ -1,4 +1,4 @@
-namespace Vectra.Client.Models.Tokens;
+namespace Synentra.Client.Models.Tokens;
 
 /// <summary>
 /// The result returned after successfully generating a JWT access token.

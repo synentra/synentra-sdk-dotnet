@@ -1,11 +1,11 @@
-using Vectra.Client.Models.Policies;
+using Synentra.Client.Models.Policies;
 
-namespace Vectra.Client.Abstractions;
+namespace Synentra.Client.Abstractions;
 
 /// <summary>
-/// Provides read-only access to policies configured in the Vectra gateway.
+/// Provides read-only access to policies configured in the Synentra gateway.
 /// </summary>
-public interface IVectraPolicyClient
+public interface ISynentraPolicyClient
 {
     /// <summary>
     /// Lists all available policies with optional pagination.

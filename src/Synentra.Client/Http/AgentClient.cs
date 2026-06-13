@@ -1,15 +1,15 @@
 using System.Net.Http.Json;
-using Vectra.Client.Abstractions;
-using Vectra.Client.Internal;
-using Vectra.Client.Models.Agents;
-using Vectra.Client.Models.Common;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Internal;
+using Synentra.Client.Models.Agents;
+using Synentra.Client.Models.Common;
 
-namespace Vectra.Client.Http;
+namespace Synentra.Client.Http;
 
 /// <summary>
-/// HTTP implementation of <see cref="IVectraAgentClient"/>.
+/// HTTP implementation of <see cref="ISynentraAgentClient"/>.
 /// </summary>
-internal sealed class AgentClient : IVectraAgentClient
+internal sealed class AgentClient : ISynentraAgentClient
 {
     private readonly HttpClient _http;
 
@@ -42,7 +42,7 @@ internal sealed class AgentClient : IVectraAgentClient
         var response = await _http.PostAsJsonAsync(
             "Agents",
             request,
-            VectraJsonOptions.Default,
+            SynentraJsonOptions.Default,
             cancellationToken);
 
         return await response.ReadAsAsync<RegisterAgentResult>(cancellationToken);
@@ -59,7 +59,7 @@ internal sealed class AgentClient : IVectraAgentClient
         var response = await _http.PutAsJsonAsync(
             $"Agents/{agentId}/policy",
             request,
-            VectraJsonOptions.Default,
+            SynentraJsonOptions.Default,
             cancellationToken);
 
         await response.EnsureSuccessAsync(cancellationToken);

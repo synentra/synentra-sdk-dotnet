@@ -1,4 +1,4 @@
-namespace Vectra.Client.Models.Policies;
+namespace Synentra.Client.Models.Policies;
 
 /// <summary>
 /// Represents a single rule within a <see cref="PolicyDetails"/>.

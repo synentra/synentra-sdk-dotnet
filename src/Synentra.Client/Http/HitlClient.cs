@@ -1,15 +1,15 @@
 using System.Net.Http.Json;
-using Vectra.Client.Abstractions;
-using Vectra.Client.Internal;
-using Vectra.Client.Models.Common;
-using Vectra.Client.Models.Hitl;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Internal;
+using Synentra.Client.Models.Common;
+using Synentra.Client.Models.Hitl;
 
-namespace Vectra.Client.Http;
+namespace Synentra.Client.Http;
 
 /// <summary>
-/// HTTP implementation of <see cref="IVectraHitlClient"/>.
+/// HTTP implementation of <see cref="ISynentraHitlClient"/>.
 /// </summary>
-internal sealed class HitlClient : IVectraHitlClient
+internal sealed class HitlClient : ISynentraHitlClient
 {
     private readonly HttpClient _http;
 
@@ -54,7 +54,7 @@ internal sealed class HitlClient : IVectraHitlClient
         var response = await _http.PostAsJsonAsync(
             $"Hitls/{Uri.EscapeDataString(id)}/approve",
             decision ?? new ReviewDecisionRequest(),
-            VectraJsonOptions.Default,
+            SynentraJsonOptions.Default,
             cancellationToken);
 
         await response.EnsureSuccessAsync(cancellationToken);
@@ -71,7 +71,7 @@ internal sealed class HitlClient : IVectraHitlClient
         var response = await _http.PostAsJsonAsync(
             $"Hitls/{Uri.EscapeDataString(id)}/deny",
             decision ?? new ReviewDecisionRequest(),
-            VectraJsonOptions.Default,
+            SynentraJsonOptions.Default,
             cancellationToken);
 
         await response.EnsureSuccessAsync(cancellationToken);

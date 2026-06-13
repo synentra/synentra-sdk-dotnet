@@ -2,7 +2,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 
-namespace Vectra.Client.UnitTests.Helpers;
+namespace Synentra.Client.UnitTests.Helpers;
 
 /// <summary>
 /// A simple fake <see cref="HttpMessageHandler"/> that returns a pre-configured response.

@@ -1,17 +1,17 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Vectra.Client.Configuration;
+namespace Synentra.Client.Configuration;
 
 /// <summary>
-/// Configuration options for the Vectra SDK HTTP client.
+/// Configuration options for the Synentra SDK HTTP client.
 /// </summary>
 /// <remarks>
-/// Register via <c>services.AddVectraClient(options => { ... })</c>.
+/// Register via <c>services.AddSynentraClient(options => { ... })</c>.
 /// </remarks>
-public sealed class VectraClientOptions
+public sealed class SynentraClientOptions
 {
     /// <summary>
-    /// Gets or sets the base URL of the Vectra gateway (e.g. <c>http://localhost:7080</c>).
+    /// Gets or sets the base URL of the Synentra gateway (e.g. <c>http://localhost:7080</c>).
     /// </summary>
     /// <remarks>
     /// A trailing slash is automatically normalised. This property is required.
@@ -34,7 +34,7 @@ public sealed class VectraClientOptions
     public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(30);
 
     /// <summary>
-    /// Gets or sets whether to throw a <see cref="Vectra.Client.Exceptions.VectraApiException"/>
+    /// Gets or sets whether to throw a <see cref="Synentra.Client.Exceptions.SynentraApiException"/>
     /// automatically when the server returns a non-success HTTP status code.
     /// Defaults to <see langword="true"/>.
     /// </summary>

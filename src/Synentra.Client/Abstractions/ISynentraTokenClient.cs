@@ -1,11 +1,11 @@
-using Vectra.Client.Models.Tokens;
+using Synentra.Client.Models.Tokens;
 
-namespace Vectra.Client.Abstractions;
+namespace Synentra.Client.Abstractions;
 
 /// <summary>
-/// Provides token authentication operations for the Vectra gateway.
+/// Provides token authentication operations for the Synentra gateway.
 /// </summary>
-public interface IVectraTokenClient
+public interface ISynentraTokenClient
 {
     /// <summary>
     /// Exchanges an agent's credentials for a JWT bearer token.

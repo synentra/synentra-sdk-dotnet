@@ -1,8 +1,8 @@
-using Vectra.Client.Abstractions;
-using Vectra.Client.Models.Agents;
-using Vectra.Client.Models.Policies;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Models.Agents;
+using Synentra.Client.Models.Policies;
 
-namespace Vectra.Client.Examples;
+namespace Synentra.Client.Examples;
 
 /// <summary>
 /// Example 10 — Pagination and Bulk Operations
@@ -18,10 +18,10 @@ namespace Vectra.Client.Examples;
 ///   • Aggregating data across pages
 ///
 /// Prerequisites:
-///   • Vectra gateway running and authenticated
+///   • Synentra gateway running and authenticated
 ///   • Multiple agents registered (register a few via example 03 first)
 /// </summary>
-public sealed class PaginationAndBulkExample(IVectraClient vectra)
+public sealed class PaginationAndBulkExample(ISynentraClient synentra)
 {
     public async Task RunAsync(CancellationToken ct = default)
     {
@@ -36,7 +36,7 @@ public sealed class PaginationAndBulkExample(IVectraClient vectra)
 
         while (true)
         {
-            var batch = await vectra.Agents.ListAsync(page, PageSize, ct);
+            var batch = await synentra.Agents.ListAsync(page, PageSize, ct);
 
             if (batch.Count == 0)
                 break;
@@ -54,8 +54,8 @@ public sealed class PaginationAndBulkExample(IVectraClient vectra)
         // ── 2. FetchAllAsync helper ────────────────────────────────────────────
         Section("2. Using the FetchAllAsync helper (fetches every page automatically)");
 
-        var allAgents   = await FetchAllAgentsAsync(vectra, pageSize: 25, ct);
-        var allPolicies = await FetchAllPoliciesAsync(vectra, pageSize: 25, ct);
+        var allAgents   = await FetchAllAgentsAsync(synentra, pageSize: 25, ct);
+        var allPolicies = await FetchAllPoliciesAsync(synentra, pageSize: 25, ct);
 
         Out($"  All agents   : {allAgents.Count}");
         Out($"  All policies : {allPolicies.Count}");
@@ -112,7 +112,7 @@ public sealed class PaginationAndBulkExample(IVectraClient vectra)
                 if (confirm is "y" or "yes")
                 {
                     var results = await BulkAssignPolicyAsync(
-                        vectra,
+                        synentra,
                         unassigned,
                         defaultPolicy,
                         maxConcurrency: 3,
@@ -141,7 +141,7 @@ public sealed class PaginationAndBulkExample(IVectraClient vectra)
         {
             try
             {
-                var details = await vectra.Policies.GetAsync(policySummary.PolicyName, ct);
+                var details = await synentra.Policies.GetAsync(policySummary.PolicyName, ct);
                 totalRules += details.Rules.Count;
 
                 foreach (var rule in details.Rules)
@@ -164,7 +164,7 @@ public sealed class PaginationAndBulkExample(IVectraClient vectra)
     /// Fetches every page of agents and returns them as a single flat list.
     /// </summary>
     private static async Task<IReadOnlyList<AgentSummary>> FetchAllAgentsAsync(
-        IVectraClient vectra,
+        ISynentraClient synentra,
         int pageSize = 25,
         CancellationToken ct = default)
     {
@@ -173,7 +173,7 @@ public sealed class PaginationAndBulkExample(IVectraClient vectra)
 
         while (true)
         {
-            var batch = await vectra.Agents.ListAsync(page, pageSize, ct);
+            var batch = await synentra.Agents.ListAsync(page, pageSize, ct);
             all.AddRange(batch);
 
             if (batch.Count < pageSize) break;
@@ -187,7 +187,7 @@ public sealed class PaginationAndBulkExample(IVectraClient vectra)
     /// Fetches every page of policies and returns them as a single flat list.
     /// </summary>
     private static async Task<IReadOnlyList<PolicySummary>> FetchAllPoliciesAsync(
-        IVectraClient vectra,
+        ISynentraClient synentra,
         int pageSize = 25,
         CancellationToken ct = default)
     {
@@ -196,7 +196,7 @@ public sealed class PaginationAndBulkExample(IVectraClient vectra)
 
         while (true)
         {
-            var batch = await vectra.Policies.ListAsync(page, pageSize, ct);
+            var batch = await synentra.Policies.ListAsync(page, pageSize, ct);
             all.AddRange(batch);
 
             if (batch.Count < pageSize) break;
@@ -211,7 +211,7 @@ public sealed class PaginationAndBulkExample(IVectraClient vectra)
     /// Returns a result per agent indicating success or failure.
     /// </summary>
     private static async Task<IReadOnlyList<BulkAssignResult>> BulkAssignPolicyAsync(
-        IVectraClient vectra,
+        ISynentraClient synentra,
         IEnumerable<AgentSummary> agents,
         string policyName,
         int maxConcurrency = 5,
@@ -224,7 +224,7 @@ public sealed class PaginationAndBulkExample(IVectraClient vectra)
             await semaphore.WaitAsync(ct);
             try
             {
-                await vectra.Agents.AssignPolicyAsync(
+                await synentra.Agents.AssignPolicyAsync(
                     agent.AgentId,
                     new AssignPolicyRequest { PolicyName = policyName },
                     ct);

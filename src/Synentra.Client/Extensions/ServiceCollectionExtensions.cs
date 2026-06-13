@@ -1,35 +1,35 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Vectra.Client.Abstractions;
-using Vectra.Client.Configuration;
-using Vectra.Client.Http;
-using Vectra.Client.Internal;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Configuration;
+using Synentra.Client.Http;
+using Synentra.Client.Internal;
 
-namespace Vectra.Client.Extensions;
+namespace Synentra.Client.Extensions;
 
 /// <summary>
-/// Extension methods for registering the Vectra SDK with the .NET dependency injection container.
+/// Extension methods for registering the Synentra SDK with the .NET dependency injection container.
 /// </summary>
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Registers the Vectra SDK services and configures the HTTP client.
+    /// Registers the Synentra SDK services and configures the HTTP client.
     /// </summary>
     /// <param name="services">The service collection to add the SDK to.</param>
-    /// <param name="configure">A delegate that configures <see cref="VectraClientOptions"/>.</param>
+    /// <param name="configure">A delegate that configures <see cref="SynentraClientOptions"/>.</param>
     /// <returns>The same <see cref="IServiceCollection"/> for chaining.</returns>
     /// <example>
     /// <code>
-    /// builder.Services.AddVectraClient(options =>
+    /// builder.Services.AddSynentraClient(options =>
     /// {
     ///     options.BaseUrl     = "http://localhost:7080";
     ///     options.BearerToken = "your-jwt-token"; // optional
     /// });
     /// </code>
     /// </example>
-    public static IServiceCollection AddVectraClient(
+    public static IServiceCollection AddSynentraClient(
         this IServiceCollection services,
-        Action<VectraClientOptions> configure)
+        Action<SynentraClientOptions> configure)
     {
         ArgumentNullException.ThrowIfNull(configure);
 
@@ -39,45 +39,45 @@ public static class ServiceCollectionExtensions
         services.AddTransient<BearerTokenHandler>();
 
         // Register a typed HttpClient for each sub-client, each sharing the same
-        // base address and timeout resolved from VectraClientOptions.
+        // base address and timeout resolved from SynentraClientOptions.
         services
-            .AddHttpClient<IVectraAgentClient, AgentClient>()
+            .AddHttpClient<ISynentraAgentClient, AgentClient>()
             .ConfigureHttpClient(ConfigureClient)
             .AddHttpMessageHandler<BearerTokenHandler>();
 
         services
-            .AddHttpClient<IVectraPolicyClient, PolicyClient>()
+            .AddHttpClient<ISynentraPolicyClient, PolicyClient>()
             .ConfigureHttpClient(ConfigureClient)
             .AddHttpMessageHandler<BearerTokenHandler>();
 
         services
-            .AddHttpClient<IVectraHitlClient, HitlClient>()
+            .AddHttpClient<ISynentraHitlClient, HitlClient>()
             .ConfigureHttpClient(ConfigureClient)
             .AddHttpMessageHandler<BearerTokenHandler>();
 
         services
-            .AddHttpClient<IVectraTokenClient, TokenClient>()
+            .AddHttpClient<ISynentraTokenClient, TokenClient>()
             .ConfigureHttpClient(ConfigureClient)
             .AddHttpMessageHandler<BearerTokenHandler>();
 
-        services.AddTransient<IVectraClient, VectraClient>();
+        services.AddTransient<ISynentraClient, SynentraClient>();
 
         return services;
     }
 
     /// <summary>
-    /// Registers the Vectra SDK services using an already-configured
-    /// <see cref="VectraClientOptions"/> section.
+    /// Registers the Synentra SDK services using an already-configured
+    /// <see cref="SynentraClientOptions"/> section.
     /// </summary>
     /// <param name="services">The service collection to add the SDK to.</param>
     /// <param name="options">A pre-built options instance.</param>
     /// <returns>The same <see cref="IServiceCollection"/> for chaining.</returns>
-    public static IServiceCollection AddVectraClient(
+    public static IServiceCollection AddSynentraClient(
         this IServiceCollection services,
-        VectraClientOptions options)
+        SynentraClientOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return services.AddVectraClient(o =>
+        return services.AddSynentraClient(o =>
         {
             o.BaseUrl = options.BaseUrl;
             o.BearerToken = options.BearerToken;
@@ -88,7 +88,7 @@ public static class ServiceCollectionExtensions
 
     private static void ConfigureClient(IServiceProvider sp, HttpClient client)
     {
-        var options = sp.GetRequiredService<IOptions<VectraClientOptions>>().Value;
+        var options = sp.GetRequiredService<IOptions<SynentraClientOptions>>().Value;
 
         var baseUrl = options.BaseUrl.TrimEnd('/') + '/';
         client.BaseAddress = new Uri(baseUrl);

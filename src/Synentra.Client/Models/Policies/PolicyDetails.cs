@@ -1,4 +1,4 @@
-namespace Vectra.Client.Models.Policies;
+namespace Synentra.Client.Models.Policies;
 
 /// <summary>
 /// Represents the full details of a policy, including its rules.

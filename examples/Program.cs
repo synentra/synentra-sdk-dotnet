@@ -1,18 +1,18 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Vectra.Client.Examples;
-using Vectra.Client.Extensions;
+using Synentra.Client.Examples;
+using Synentra.Client.Extensions;
 
 // ╔═════════════════════════════════════════════════════════════════╗
-// ║            Vectra SDK for .NET — Interactive Examples           ║
+// ║            Synentra SDK for .NET — Interactive Examples         ║
 // ║                                                                 ║
 // ║  Configure the gateway URL and optional token below, then       ║
 // ║  pick any example from the menu to run it against a live        ║
-// ║  Vectra instance.                                               ║
+// ║  Synentra instance.                                             ║
 // ║                                                                 ║
 // ║  Quick-start:                                                   ║
-// ║    docker run -p 7080:7080 ghcr.io/cortexiumlabs/vectra:latest  ║
+// ║    docker run -p 7080:7080 ghcr.io/synentra/synentra:latest     ║
 // ╚═════════════════════════════════════════════════════════════════╝
 
 const string GatewayUrl   = "http://localhost:7080";
@@ -33,13 +33,13 @@ var host = Host.CreateDefaultBuilder(args)
     })
     .ConfigureServices(services =>
     {
-        services.AddVectraClient(options =>
+        services.AddSynentraClient(options =>
         {
             options.BaseUrl     = GatewayUrl;
             options.BearerToken = string.IsNullOrWhiteSpace(BearerToken) ? null : BearerToken;
         });
 
-        // Register examples so they can inject IVectraClient + ILogger
+        // Register examples so they can inject ISynentraClient + ILogger
         services.AddTransient<QuickStartExample>();
         services.AddTransient<TokenAuthenticationExample>();
         services.AddTransient<AgentManagementExample>();
@@ -71,7 +71,7 @@ var examples = new (string Label, Func<Task> Run)[]
 while (true)
 {
     Console.WriteLine();
-    Banner("Vectra SDK for .NET — Examples");
+    Banner("Synentra SDK for .NET — Examples");
     Console.WriteLine($"  Gateway : {GatewayUrl}");
     Console.WriteLine();
 

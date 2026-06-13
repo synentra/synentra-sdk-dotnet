@@ -1,7 +1,7 @@
-namespace Vectra.Client.Models.Common;
+namespace Synentra.Client.Models.Common;
 
 /// <summary>
-/// Represents a paginated list of items returned by the Vectra API.
+/// Represents a paginated list of items returned by the Synentra API.
 /// </summary>
 /// <typeparam name="T">The type of items in the page.</typeparam>
 public sealed class PagedResult<T>

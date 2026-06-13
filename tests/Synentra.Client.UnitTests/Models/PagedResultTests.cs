@@ -1,6 +1,6 @@
-using Vectra.Client.Models.Common;
+using Synentra.Client.Models.Common;
 
-namespace Vectra.Client.UnitTests.Models;
+namespace Synentra.Client.UnitTests.Models;
 
 public sealed class PagedResultTests
 {

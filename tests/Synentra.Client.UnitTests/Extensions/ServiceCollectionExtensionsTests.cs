@@ -1,86 +1,86 @@
 using Microsoft.Extensions.DependencyInjection;
-using Vectra.Client.Abstractions;
-using Vectra.Client.Configuration;
-using Vectra.Client.Extensions;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Configuration;
+using Synentra.Client.Extensions;
 
-namespace Vectra.Client.UnitTests.Extensions;
+namespace Synentra.Client.UnitTests.Extensions;
 
 public sealed class ServiceCollectionExtensionsTests
 {
     [Fact]
-    public void AddVectraClient_WithDelegate_RegistersIVectraClient()
+    public void AddSynentraClient_WithDelegate_RegistersISynentraClient()
     {
         var services = new ServiceCollection();
 
-        services.AddVectraClient(o => o.BaseUrl = "http://localhost:7080");
+        services.AddSynentraClient(o => o.BaseUrl = "http://localhost:7080");
 
         var provider = services.BuildServiceProvider();
-        var client = provider.GetService<IVectraClient>();
+        var client = provider.GetService<ISynentraClient>();
         client.Should().NotBeNull();
     }
 
     [Fact]
-    public void AddVectraClient_WithDelegate_RegistersSubClients()
+    public void AddSynentraClient_WithDelegate_RegistersSubClients()
     {
         var services = new ServiceCollection();
 
-        services.AddVectraClient(o => o.BaseUrl = "http://localhost:7080");
+        services.AddSynentraClient(o => o.BaseUrl = "http://localhost:7080");
 
         var provider = services.BuildServiceProvider();
-        provider.GetService<IVectraAgentClient>().Should().NotBeNull();
-        provider.GetService<IVectraPolicyClient>().Should().NotBeNull();
-        provider.GetService<IVectraHitlClient>().Should().NotBeNull();
-        provider.GetService<IVectraTokenClient>().Should().NotBeNull();
+        provider.GetService<ISynentraAgentClient>().Should().NotBeNull();
+        provider.GetService<ISynentraPolicyClient>().Should().NotBeNull();
+        provider.GetService<ISynentraHitlClient>().Should().NotBeNull();
+        provider.GetService<ISynentraTokenClient>().Should().NotBeNull();
     }
 
     [Fact]
-    public void AddVectraClient_WithOptions_RegistersIVectraClient()
+    public void AddSynentraClient_WithOptions_RegistersISynentraClient()
     {
         var services = new ServiceCollection();
-        var options = new VectraClientOptions { BaseUrl = "http://localhost:7080", BearerToken = "tok" };
+        var options = new SynentraClientOptions { BaseUrl = "http://localhost:7080", BearerToken = "tok" };
 
-        services.AddVectraClient(options);
+        services.AddSynentraClient(options);
 
         var provider = services.BuildServiceProvider();
-        provider.GetService<IVectraClient>().Should().NotBeNull();
+        provider.GetService<ISynentraClient>().Should().NotBeNull();
     }
 
     [Fact]
-    public void AddVectraClient_ThrowsArgumentNullException_WhenConfigureIsNull()
+    public void AddSynentraClient_ThrowsArgumentNullException_WhenConfigureIsNull()
     {
         var services = new ServiceCollection();
 
-        var act = () => services.AddVectraClient((Action<VectraClientOptions>)null!);
+        var act = () => services.AddSynentraClient((Action<SynentraClientOptions>)null!);
 
         act.Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
-    public void AddVectraClient_ThrowsArgumentNullException_WhenOptionsIsNull()
+    public void AddSynentraClient_ThrowsArgumentNullException_WhenOptionsIsNull()
     {
         var services = new ServiceCollection();
 
-        var act = () => services.AddVectraClient((VectraClientOptions)null!);
+        var act = () => services.AddSynentraClient((SynentraClientOptions)null!);
 
         act.Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
-    public void AddVectraClient_ReturnsServiceCollection_ForChaining()
+    public void AddSynentraClient_ReturnsServiceCollection_ForChaining()
     {
         var services = new ServiceCollection();
 
-        var result = services.AddVectraClient(o => o.BaseUrl = "http://localhost");
+        var result = services.AddSynentraClient(o => o.BaseUrl = "http://localhost");
 
         result.Should().BeSameAs(services);
     }
 
     [Fact]
-    public void AddVectraClient_ConfiguresBaseAddress_FromOptions()
+    public void AddSynentraClient_ConfiguresBaseAddress_FromOptions()
     {
         var services = new ServiceCollection();
 
-        services.AddVectraClient(o =>
+        services.AddSynentraClient(o =>
         {
             o.BaseUrl = "http://localhost:7080";
             o.Timeout = TimeSpan.FromSeconds(10);

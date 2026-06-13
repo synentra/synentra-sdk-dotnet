@@ -1,14 +1,14 @@
-using Vectra.Client.Abstractions;
-using Vectra.Client.Internal;
-using Vectra.Client.Models.Common;
-using Vectra.Client.Models.Policies;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Internal;
+using Synentra.Client.Models.Common;
+using Synentra.Client.Models.Policies;
 
-namespace Vectra.Client.Http;
+namespace Synentra.Client.Http;
 
 /// <summary>
-/// HTTP implementation of <see cref="IVectraPolicyClient"/>.
+/// HTTP implementation of <see cref="ISynentraPolicyClient"/>.
 /// </summary>
-internal sealed class PolicyClient : IVectraPolicyClient
+internal sealed class PolicyClient : ISynentraPolicyClient
 {
     private readonly HttpClient _http;
 

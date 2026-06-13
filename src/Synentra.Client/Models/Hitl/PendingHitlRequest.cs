@@ -1,4 +1,4 @@
-namespace Vectra.Client.Models.Hitl;
+namespace Synentra.Client.Models.Hitl;
 
 /// <summary>
 /// Represents a HITL request that is currently waiting for a human reviewer decision.

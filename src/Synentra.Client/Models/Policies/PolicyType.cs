@@ -1,4 +1,4 @@
-namespace Vectra.Client.Models.Policies;
+namespace Synentra.Client.Models.Policies;
 
 /// <summary>
 /// The default effect applied by a policy when no rule matches.

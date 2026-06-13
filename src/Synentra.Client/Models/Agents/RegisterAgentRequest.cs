@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Vectra.Client.Models.Agents;
+namespace Synentra.Client.Models.Agents;
 
 /// <summary>
 /// The request body used to register a new AI agent.
@@ -17,7 +17,7 @@ public sealed class RegisterAgentRequest
 
     /// <summary>
     /// Gets or sets the client secret that the agent will use to authenticate.
-    /// Store this securely — the Vectra server only stores a hash.
+    /// Store this securely — the Synentra server only stores a hash.
     /// </summary>
     [Required]
     public required string ClientSecret { get; set; }

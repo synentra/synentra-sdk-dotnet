@@ -1,8 +1,8 @@
-using Vectra.Client.Abstractions;
-using Vectra.Client.Exceptions;
-using Vectra.Client.Models.Agents;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Exceptions;
+using Synentra.Client.Models.Agents;
 
-namespace Vectra.Client.Examples;
+namespace Synentra.Client.Examples;
 
 /// <summary>
 /// Example 03 — Agent Management
@@ -17,10 +17,10 @@ namespace Vectra.Client.Examples;
 /// cleaned up at the end of the example unless an error occurs mid-way.
 ///
 /// Prerequisites:
-///   • Vectra gateway running and authenticated (BearerToken set)
+///   • Synentra gateway running and authenticated (BearerToken set)
 ///   • At least one policy configured (or leave PolicyName blank)
 /// </summary>
-public sealed class AgentManagementExample(IVectraClient vectra)
+public sealed class AgentManagementExample(ISynentraClient synentra)
 {
     private const string ExampleAgentName   = "sdk-example-agent";
     private const string ExampleAgentOwner  = "sdk-examples";
@@ -35,7 +35,7 @@ public sealed class AgentManagementExample(IVectraClient vectra)
             // ── 1. Register ───────────────────────────────────────────────────
             Section("1. Register a new agent");
 
-            var registration = await vectra.Agents.RegisterAsync(new RegisterAgentRequest
+            var registration = await synentra.Agents.RegisterAsync(new RegisterAgentRequest
             {
                 Name         = ExampleAgentName,
                 OwnerId      = ExampleAgentOwner,
@@ -51,7 +51,7 @@ public sealed class AgentManagementExample(IVectraClient vectra)
             // ── 2. List & locate ──────────────────────────────────────────────
             Section("2. List agents and locate the new one");
 
-            var agents = await vectra.Agents.ListAsync(cancellationToken: ct);
+            var agents = await synentra.Agents.ListAsync(cancellationToken: ct);
             Out($"  Total agents in gateway: {agents.Count}");
 
             var found = agents.FirstOrDefault(a => a.AgentId == createdAgentId);
@@ -73,7 +73,7 @@ public sealed class AgentManagementExample(IVectraClient vectra)
             // ── 4. Assign a policy ────────────────────────────────────────────
             Section("4. Assign a policy");
 
-            var policies = await vectra.Policies.ListAsync(cancellationToken: ct);
+            var policies = await synentra.Policies.ListAsync(cancellationToken: ct);
             if (policies.Count == 0)
             {
                 Out("  No policies available — skipping assignment.");
@@ -83,7 +83,7 @@ public sealed class AgentManagementExample(IVectraClient vectra)
             {
                 var policyName = policies[0].PolicyName;
 
-                await vectra.Agents.AssignPolicyAsync(
+                await synentra.Agents.AssignPolicyAsync(
                     createdAgentId.Value,
                     new AssignPolicyRequest { PolicyName = policyName },
                     ct);
@@ -91,7 +91,7 @@ public sealed class AgentManagementExample(IVectraClient vectra)
                 Out($"  ✓ Policy '{policyName}' assigned to agent {createdAgentId}");
 
                 // Verify by re-listing
-                var updated = (await vectra.Agents.ListAsync(cancellationToken: ct))
+                var updated = (await synentra.Agents.ListAsync(cancellationToken: ct))
                     .FirstOrDefault(a => a.AgentId == createdAgentId);
 
                 if (updated is not null)
@@ -104,7 +104,7 @@ public sealed class AgentManagementExample(IVectraClient vectra)
                 Section("5. Re-assign to a different policy");
 
                 var newPolicy = policies[1].PolicyName;
-                await vectra.Agents.AssignPolicyAsync(
+                await synentra.Agents.AssignPolicyAsync(
                     createdAgentId.Value,
                     new AssignPolicyRequest { PolicyName = newPolicy },
                     ct);
@@ -120,7 +120,7 @@ public sealed class AgentManagementExample(IVectraClient vectra)
                 Section("6. Cleanup — delete the example agent");
                 try
                 {
-                    await vectra.Agents.DeleteAsync(createdAgentId.Value, ct);
+                    await synentra.Agents.DeleteAsync(createdAgentId.Value, ct);
                     Out($"  ✓ Agent {createdAgentId} deleted.");
                 }
                 catch (Exception ex)

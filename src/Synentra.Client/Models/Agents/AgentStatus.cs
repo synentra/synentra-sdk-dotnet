@@ -1,7 +1,7 @@
-namespace Vectra.Client.Models.Agents;
+namespace Synentra.Client.Models.Agents;
 
 /// <summary>
-/// The status of a Vectra AI agent.
+/// The status of a Synentra AI agent.
 /// </summary>
 public enum AgentStatus
 {

@@ -1,6 +1,6 @@
-using Vectra.Client.Models.Policies;
+using Synentra.Client.Models.Policies;
 
-namespace Vectra.Client.UnitTests.Models;
+namespace Synentra.Client.UnitTests.Models;
 
 public sealed class PolicyRuleTests
 {

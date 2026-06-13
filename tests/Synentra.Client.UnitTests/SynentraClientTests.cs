@@ -1,13 +1,13 @@
-using Vectra.Client.Abstractions;
-using Vectra.Client.Models.Agents;
-using Vectra.Client.Models.Common;
-using Vectra.Client.Models.Hitl;
-using Vectra.Client.Models.Policies;
-using Vectra.Client.Models.Tokens;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Models.Agents;
+using Synentra.Client.Models.Common;
+using Synentra.Client.Models.Hitl;
+using Synentra.Client.Models.Policies;
+using Synentra.Client.Models.Tokens;
 
-namespace Vectra.Client.UnitTests;
+namespace Synentra.Client.UnitTests;
 
-public sealed class VectraClientTests
+public sealed class SynentraClientTests
 {
     [Fact]
     public void Constructor_AssignsSubClients()
@@ -17,7 +17,7 @@ public sealed class VectraClientTests
         var hitl = new StubHitlClient();
         var tokens = new StubTokenClient();
 
-        var sut = new VectraClient(agents, policies, hitl, tokens);
+        var sut = new SynentraClient(agents, policies, hitl, tokens);
 
         sut.Agents.Should().BeSameAs(agents);
         sut.Policies.Should().BeSameAs(policies);
@@ -26,18 +26,18 @@ public sealed class VectraClientTests
     }
 
     [Fact]
-    public void ImplementsIVectraClient()
+    public void ImplementsISynentraClient()
     {
-        var sut = new VectraClient(
+        var sut = new SynentraClient(
             new StubAgentClient(),
             new StubPolicyClient(),
             new StubHitlClient(),
             new StubTokenClient());
 
-        sut.Should().BeAssignableTo<IVectraClient>();
+        sut.Should().BeAssignableTo<ISynentraClient>();
     }
 
-    private sealed class StubAgentClient : IVectraAgentClient
+    private sealed class StubAgentClient : ISynentraAgentClient
     {
         public Task<IReadOnlyList<AgentSummary>> ListAsync(int page = 1, int pageSize = 25, CancellationToken cancellationToken = default)
             => Task.FromResult<IReadOnlyList<AgentSummary>>([]);
@@ -51,7 +51,7 @@ public sealed class VectraClientTests
             => Task.CompletedTask;
     }
 
-    private sealed class StubPolicyClient : IVectraPolicyClient
+    private sealed class StubPolicyClient : ISynentraPolicyClient
     {
         public Task<IReadOnlyList<PolicySummary>> ListAsync(int page = 1, int pageSize = 25, CancellationToken cancellationToken = default)
             => Task.FromResult<IReadOnlyList<PolicySummary>>([]);
@@ -59,7 +59,7 @@ public sealed class VectraClientTests
             => Task.FromResult(new PolicyDetails());
     }
 
-    private sealed class StubHitlClient : IVectraHitlClient
+    private sealed class StubHitlClient : ISynentraHitlClient
     {
         public Task<IReadOnlyList<PendingHitlRequest>> GetAllPendingAsync(int page = 1, int pageSize = 25, CancellationToken cancellationToken = default)
             => Task.FromResult<IReadOnlyList<PendingHitlRequest>>([]);
@@ -71,7 +71,7 @@ public sealed class VectraClientTests
             => Task.CompletedTask;
     }
 
-    private sealed class StubTokenClient : IVectraTokenClient
+    private sealed class StubTokenClient : ISynentraTokenClient
     {
         public Task<GenerateTokenResult> GenerateAsync(GenerateTokenRequest request, CancellationToken cancellationToken = default)
             => Task.FromResult(new GenerateTokenResult());

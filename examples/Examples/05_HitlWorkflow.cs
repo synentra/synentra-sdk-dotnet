@@ -1,14 +1,14 @@
-using Vectra.Client.Abstractions;
-using Vectra.Client.Exceptions;
-using Vectra.Client.Models.Hitl;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Exceptions;
+using Synentra.Client.Models.Hitl;
 
-namespace Vectra.Client.Examples;
+namespace Synentra.Client.Examples;
 
 /// <summary>
 /// Example 05 — HITL Review Workflow
 ///
 /// Demonstrates the Human-in-the-Loop (HITL) review API — the mechanism
-/// Vectra uses to intercept high-risk agent requests and hold them for
+/// Synentra uses to intercept high-risk agent requests and hold them for
 /// manual operator approval before replaying them upstream.
 ///
 /// Patterns covered:
@@ -20,18 +20,18 @@ namespace Vectra.Client.Examples;
 ///   • Rendering pending requests in a review dashboard format
 ///
 /// Prerequisites:
-///   • Vectra gateway running and authenticated
+///   • Synentra gateway running and authenticated
 ///   • At least one pending HITL request in the queue
 ///     (trigger one by sending a request the gateway classifies as high-risk)
 /// </summary>
-public sealed class HitlWorkflowExample(IVectraClient vectra)
+public sealed class HitlWorkflowExample(ISynentraClient synentra)
 {
     public async Task RunAsync(CancellationToken ct = default)
     {
         // ── 1. Get all pending requests ───────────────────────────────────────
         Section("1. List all pending HITL requests");
 
-        var pending = await vectra.Hitl.GetAllPendingAsync(page: 1, pageSize: 10, ct);
+        var pending = await synentra.Hitl.GetAllPendingAsync(page: 1, pageSize: 10, ct);
 
         if (pending.Count == 0)
         {
@@ -54,7 +54,7 @@ public sealed class HitlWorkflowExample(IVectraClient vectra)
             var first = pending[0];
             Out($"  Fetching status for request: {first.Id}");
 
-            var status = await vectra.Hitl.GetStatusAsync(first.Id, ct);
+            var status = await synentra.Hitl.GetStatusAsync(first.Id, ct);
             PrintStatus(status);
         }
         else
@@ -80,7 +80,7 @@ public sealed class HitlWorkflowExample(IVectraClient vectra)
 
             if (confirm is "y" or "yes")
             {
-                await vectra.Hitl.ApproveAsync(target.Id, new ReviewDecisionRequest
+                await synentra.Hitl.ApproveAsync(target.Id, new ReviewDecisionRequest
                 {
                     Comment = "Approved via SDK examples — verified safe."
                 }, ct);
@@ -101,7 +101,7 @@ public sealed class HitlWorkflowExample(IVectraClient vectra)
         Section("4. Deny a pending request");
 
         // Re-fetch in case the approve consumed the first one
-        var remaining = await vectra.Hitl.GetAllPendingAsync(page: 1, pageSize: 10, ct);
+        var remaining = await synentra.Hitl.GetAllPendingAsync(page: 1, pageSize: 10, ct);
 
         if (remaining.Count > 0)
         {
@@ -116,7 +116,7 @@ public sealed class HitlWorkflowExample(IVectraClient vectra)
 
             if (confirm is "y" or "yes")
             {
-                await vectra.Hitl.DenyAsync(target.Id, new ReviewDecisionRequest
+                await synentra.Hitl.DenyAsync(target.Id, new ReviewDecisionRequest
                 {
                     Comment = "Denied via SDK examples — suspicious pattern detected."
                 }, ct);
@@ -138,9 +138,9 @@ public sealed class HitlWorkflowExample(IVectraClient vectra)
 
         try
         {
-            await vectra.Hitl.GetStatusAsync("non-existent-hitl-id-00000000", ct);
+            await synentra.Hitl.GetStatusAsync("non-existent-hitl-id-00000000", ct);
         }
-        catch (VectraApiException ex) when (ex.StatusCode == 404)
+        catch (SynentraApiException ex) when (ex.StatusCode == 404)
         {
             Out($"  ✓ Caught 404 as expected for unknown HITL ID.");
             Out($"      Message: {ex.Message}");
@@ -148,10 +148,10 @@ public sealed class HitlWorkflowExample(IVectraClient vectra)
 
         try
         {
-            await vectra.Hitl.ApproveAsync("non-existent-hitl-id-00000000",
+            await synentra.Hitl.ApproveAsync("non-existent-hitl-id-00000000",
                 new ReviewDecisionRequest { Comment = "test" }, ct);
         }
-        catch (VectraApiException ex) when (ex.StatusCode == 404)
+        catch (SynentraApiException ex) when (ex.StatusCode == 404)
         {
             Out($"  ✓ Caught 404 on approve of unknown HITL ID.");
         }

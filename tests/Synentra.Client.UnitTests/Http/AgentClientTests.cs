@@ -1,13 +1,13 @@
-using Vectra.Client.Configuration;
-using Vectra.Client.Exceptions;
-using Vectra.Client.Http;
-using Vectra.Client.Models.Agents;
-using Vectra.Client.Models.Common;
-using Vectra.Client.UnitTests.Helpers;
+using Synentra.Client.Configuration;
+using Synentra.Client.Exceptions;
+using Synentra.Client.Http;
+using Synentra.Client.Models.Agents;
+using Synentra.Client.Models.Common;
+using Synentra.Client.UnitTests.Helpers;
 using System.Net;
 using System.Text.Json;
 
-namespace Vectra.Client.UnitTests.Http;
+namespace Synentra.Client.UnitTests.Http;
 
 public sealed class AgentClientTests
 {
@@ -50,14 +50,14 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async Task ListAsync_ThrowsVectraApiException_OnServerError()
+    public async Task ListAsync_ThrowsSynentraApiException_OnServerError()
     {
         var handler = new MockHttpMessageHandler(HttpStatusCode.InternalServerError, "oops");
         var sut = new AgentClient(CreateClient(handler));
 
         var act = () => sut.ListAsync();
 
-        await act.Should().ThrowAsync<VectraApiException>();
+        await act.Should().ThrowAsync<SynentraApiException>();
     }
 
     [Fact]
@@ -108,14 +108,14 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async Task RegisterAsync_ThrowsVectraAuthenticationException_On401()
+    public async Task RegisterAsync_ThrowsSynentraAuthenticationException_On401()
     {
         var handler = new MockHttpMessageHandler(HttpStatusCode.Unauthorized);
         var sut = new AgentClient(CreateClient(handler));
 
         var act = () => sut.RegisterAsync(new RegisterAgentRequest { Name = "A", OwnerId = "O", ClientSecret = "S" });
 
-        await act.Should().ThrowAsync<VectraAuthenticationException>()
+        await act.Should().ThrowAsync<SynentraAuthenticationException>()
             .Where(e => e.StatusCode == 401);
     }
 
@@ -144,14 +144,14 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async Task AssignPolicyAsync_ThrowsVectraApiException_On500()
+    public async Task AssignPolicyAsync_ThrowsSynentraApiException_On500()
     {
         var handler = new MockHttpMessageHandler(HttpStatusCode.InternalServerError, "err");
         var sut = new AgentClient(CreateClient(handler));
 
         var act = () => sut.AssignPolicyAsync(Guid.NewGuid(), new AssignPolicyRequest { PolicyName = "p" });
 
-        await act.Should().ThrowAsync<VectraApiException>();
+        await act.Should().ThrowAsync<SynentraApiException>();
     }
 
     [Fact]
@@ -168,14 +168,14 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async Task DeleteAsync_ThrowsVectraAuthenticationException_On403()
+    public async Task DeleteAsync_ThrowsSynentraAuthenticationException_On403()
     {
         var handler = new MockHttpMessageHandler(HttpStatusCode.Forbidden);
         var sut = new AgentClient(CreateClient(handler));
 
         var act = () => sut.DeleteAsync(Guid.NewGuid());
 
-        await act.Should().ThrowAsync<VectraAuthenticationException>()
+        await act.Should().ThrowAsync<SynentraAuthenticationException>()
             .Where(e => e.StatusCode == 403);
     }
 
@@ -194,13 +194,13 @@ public sealed class AgentClientTests
     }
 
     [Fact]
-    public async Task LiftQuarantineAsync_ThrowsVectraApiException_On500()
+    public async Task LiftQuarantineAsync_ThrowsSynentraApiException_On500()
     {
         var handler = new MockHttpMessageHandler(HttpStatusCode.InternalServerError, "err");
         var sut = new AgentClient(CreateClient(handler));
 
         var act = () => sut.LiftQuarantineAsync(Guid.NewGuid());
 
-        await act.Should().ThrowAsync<VectraApiException>();
+        await act.Should().ThrowAsync<SynentraApiException>();
     }
 }

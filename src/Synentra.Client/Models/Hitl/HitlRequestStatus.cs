@@ -1,4 +1,4 @@
-namespace Vectra.Client.Models.Hitl;
+namespace Synentra.Client.Models.Hitl;
 
 /// <summary>
 /// The current lifecycle status of a Human-in-the-Loop (HITL) request.

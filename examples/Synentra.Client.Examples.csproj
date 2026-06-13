@@ -5,10 +5,10 @@
 	<TargetFramework>net10.0</TargetFramework>
 	<Nullable>enable</Nullable>
 	<ImplicitUsings>enable</ImplicitUsings>
-	<RootNamespace>Vectra.Client.Examples</RootNamespace>
-	<AssemblyName>Vectra.Client.Net.Examples</AssemblyName>
-	<Title>Vectra SDK for .NET — Examples</Title>
-	<Description>Runnable examples demonstrating every feature of the Vectra.Client.Net client library.</Description>
+	<RootNamespace>Synentra.Client.Examples</RootNamespace>
+	<AssemblyName>Synentra.Client.Net.Examples</AssemblyName>
+	<Title>Synentra SDK for .NET — Examples</Title>
+	<Description>Runnable examples demonstrating every feature of the Synentra.Client.Net client library.</Description>
   </PropertyGroup>
 
   <ItemGroup>

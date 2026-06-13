@@ -1,6 +1,6 @@
 # Contribution Guidelines
 
-Thank you for your interest in contributing to **Vectra**!  
+Thank you for your interest in contributing to **Synentra**!  
 We’re thrilled to collaborate with developers like you to make this project more powerful, stable, and innovative.
 
 Whether you’re here to:
@@ -22,8 +22,8 @@ All changes to the codebase are made through **Pull Requests (PRs)** — followi
 
 1. **Fork** the repository and create a new branch from `main`.  
    Use a descriptive branch name, e.g.:
-   - `feature/vectra-ruleset`
-   - `fix/vectra-proxy-bug`
+   - `feature/synentra-ruleset`
+   - `fix/synentra-proxy-bug`
 2. **Implement your changes** — write clean, maintainable, and well-documented code.
 3. **Write tests** for any new or modified functionality.
 4. **Update documentation** if your changes affect public APIs or usage.
@@ -34,12 +34,12 @@ All changes to the codebase are made through **Pull Requests (PRs)** — followi
    - References to related issues or discussions.
    - Screenshots, logs, or examples where relevant.
 
-💡 *We actively review all pull requests and provide constructive feedback. Your ideas and improvements help shape Vectra for everyone.*
+💡 *We actively review all pull requests and provide constructive feedback. Your ideas and improvements help shape Synentra for everyone.*
 
 ## Reporting Bugs & Issues
 
-We use [GitHub Issues](https://github.com/cortexiumlabs/vectra-sdk-dotnet/issues) to track bugs, enhancements, and discussions.
-To report a bug, [open a new issue](https://github.com/cortexiumlabs/vectra-sdk-dotnet/issues/new) and include as much detail as possible:
+We use [GitHub Issues](https://github.com/synentra/synentra-sdk-dotnet/issues) to track bugs, enhancements, and discussions.
+To report a bug, [open a new issue](https://github.com/synentra/synentra-sdk-dotnet/issues/new) and include as much detail as possible:
 
 - **Summary** – A short description of the issue.  
 - **Steps to Reproduce** – Include exact steps or a minimal reproducible example (preferably in C#).  
@@ -56,11 +56,11 @@ Be respectful, constructive, and considerate in all interactions — collaborati
 
 ## License
 
-By contributing to **Vectra SDK for .NET**, you agree that your contributions will be licensed under the terms of the [Apache-2.0](https://opensource.org/license/Apache-2.0), which governs this project.
+By contributing to **Synentra SDK for .NET**, you agree that your contributions will be licensed under the terms of the [Apache-2.0](https://opensource.org/license/Apache-2.0), which governs this project.
 
 If you have any questions about licensing or contributions, please reach out to the maintainers.
 
 ## ❤️ Thank You
 
-Your time and expertise make **Vectra SDK for .NET** better every day.  
+Your time and expertise make **Synentra SDK for .NET** better every day.  
 Together, we can build a flexible, open, and powerful .NET SDK for everyone.Together, we can build a flexible, open, and powerful .NET SDK for everyone.

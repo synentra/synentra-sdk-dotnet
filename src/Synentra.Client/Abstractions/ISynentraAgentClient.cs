@@ -1,11 +1,11 @@
-using Vectra.Client.Models.Agents;
+using Synentra.Client.Models.Agents;
 
-namespace Vectra.Client.Abstractions;
+namespace Synentra.Client.Abstractions;
 
 /// <summary>
-/// Provides operations for managing AI agents in the Vectra gateway.
+/// Provides operations for managing AI agents in the Synentra gateway.
 /// </summary>
-public interface IVectraAgentClient
+public interface ISynentraAgentClient
 {
     /// <summary>
     /// Lists all registered agents with optional pagination.
@@ -20,7 +20,7 @@ public interface IVectraAgentClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Registers a new AI agent in the Vectra gateway.
+    /// Registers a new AI agent in the Synentra gateway.
     /// </summary>
     /// <param name="request">The registration request containing name, owner, and client secret.</param>
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
@@ -41,7 +41,7 @@ public interface IVectraAgentClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Permanently deletes an agent from the Vectra gateway.
+    /// Permanently deletes an agent from the Synentra gateway.
     /// </summary>
     /// <param name="agentId">The unique identifier of the agent to delete.</param>
     /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>

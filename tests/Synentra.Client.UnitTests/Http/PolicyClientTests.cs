@@ -1,11 +1,11 @@
-using Vectra.Client.Exceptions;
-using Vectra.Client.Http;
-using Vectra.Client.Models.Common;
-using Vectra.Client.Models.Policies;
-using Vectra.Client.UnitTests.Helpers;
+using Synentra.Client.Exceptions;
+using Synentra.Client.Http;
+using Synentra.Client.Models.Common;
+using Synentra.Client.Models.Policies;
+using Synentra.Client.UnitTests.Helpers;
 using System.Net;
 
-namespace Vectra.Client.UnitTests.Http;
+namespace Synentra.Client.UnitTests.Http;
 
 public sealed class PolicyClientTests
 {
@@ -44,14 +44,14 @@ public sealed class PolicyClientTests
     }
 
     [Fact]
-    public async Task ListAsync_ThrowsVectraApiException_OnServerError()
+    public async Task ListAsync_ThrowsSynentraApiException_OnServerError()
     {
         var handler = new MockHttpMessageHandler(HttpStatusCode.ServiceUnavailable);
         var sut = new PolicyClient(CreateClient(handler));
 
         var act = () => sut.ListAsync();
 
-        await act.Should().ThrowAsync<VectraApiException>();
+        await act.Should().ThrowAsync<SynentraApiException>();
     }
 
     [Fact]
@@ -91,19 +91,19 @@ public sealed class PolicyClientTests
     }
 
     [Fact]
-    public async Task GetAsync_ThrowsVectraAuthenticationException_On401()
+    public async Task GetAsync_ThrowsSynentraAuthenticationException_On401()
     {
         var handler = new MockHttpMessageHandler(HttpStatusCode.Unauthorized);
         var sut = new PolicyClient(CreateClient(handler));
 
         var act = () => sut.GetAsync("some-policy");
 
-        await act.Should().ThrowAsync<VectraAuthenticationException>()
+        await act.Should().ThrowAsync<SynentraAuthenticationException>()
             .Where(e => e.StatusCode == 401);
     }
 
     [Fact]
-    public async Task GetAsync_ThrowsVectraApiException_WithStructuredError()
+    public async Task GetAsync_ThrowsSynentraApiException_WithStructuredError()
     {
         var errorBody = new { message = "Not found", code = "POLICY_NOT_FOUND", statusCode = 404 };
         var handler = new MockHttpMessageHandler(HttpStatusCode.NotFound, errorBody);
@@ -111,7 +111,7 @@ public sealed class PolicyClientTests
 
         var act = () => sut.GetAsync("missing");
 
-        var ex = await act.Should().ThrowAsync<VectraApiException>();
+        var ex = await act.Should().ThrowAsync<SynentraApiException>();
         ex.Which.StatusCode.Should().Be(404);
         ex.Which.ApiError.Should().NotBeNull();
         ex.Which.ApiError!.Code.Should().Be("POLICY_NOT_FOUND");

@@ -1,14 +1,14 @@
-using Vectra.Client.Exceptions;
-using Vectra.Client.Models.Common;
+using Synentra.Client.Exceptions;
+using Synentra.Client.Models.Common;
 
-namespace Vectra.Client.UnitTests.Exceptions;
+namespace Synentra.Client.UnitTests.Exceptions;
 
-public sealed class VectraApiExceptionTests
+public sealed class SynentraApiExceptionTests
 {
     [Fact]
     public void Constructor_WithStatusCodeAndMessage_SetsProperties()
     {
-        var ex = new VectraApiException(404, "Not found");
+        var ex = new SynentraApiException(404, "Not found");
 
         ex.StatusCode.Should().Be(404);
         ex.Message.Should().Be("Not found");
@@ -18,7 +18,7 @@ public sealed class VectraApiExceptionTests
     [Fact]
     public void Constructor_WithApiError_SetsAllProperties()
     {
-        var apiError = new VectraApiError
+        var apiError = new SynentraApiError
         {
             Message = "Bad request",
             Code = "BAD_REQ",
@@ -26,7 +26,7 @@ public sealed class VectraApiExceptionTests
             Details = "field error"
         };
 
-        var ex = new VectraApiException(apiError);
+        var ex = new SynentraApiException(apiError);
 
         ex.StatusCode.Should().Be(400);
         ex.Message.Should().Be("Bad request");
@@ -38,16 +38,16 @@ public sealed class VectraApiExceptionTests
     [Fact]
     public void ToString_IncludesStatusCodeAndMessage()
     {
-        var ex = new VectraApiException(500, "Server error");
+        var ex = new SynentraApiException(500, "Server error");
 
         ex.ToString().Should().Contain("500").And.Contain("Server error");
     }
 
     [Fact]
-    public void IsSubclassOfVectraException()
+    public void IsSubclassOfSynentraException()
     {
-        var ex = new VectraApiException(400, "err");
+        var ex = new SynentraApiException(400, "err");
 
-        ex.Should().BeAssignableTo<VectraException>();
+        ex.Should().BeAssignableTo<SynentraException>();
     }
 }

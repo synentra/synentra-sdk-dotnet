@@ -1,10 +1,10 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Vectra.Client.Exceptions;
-using Vectra.Client.Models.Common;
+using Synentra.Client.Exceptions;
+using Synentra.Client.Models.Common;
 
-namespace Vectra.Client.Internal;
+namespace Synentra.Client.Internal;
 
 /// <summary>
 /// Extension methods for handling <see cref="HttpResponseMessage"/> objects.
@@ -13,7 +13,7 @@ internal static class HttpResponseExtensions
 {
     /// <summary>
     /// Reads the response body as <typeparamref name="T"/>, throwing a
-    /// <see cref="VectraApiException"/> on non-success status codes.
+    /// <see cref="SynentraApiException"/> on non-success status codes.
     /// </summary>
     internal static async Task<T> ReadAsAsync<T>(
         this HttpResponseMessage response,
@@ -22,11 +22,11 @@ internal static class HttpResponseExtensions
         await EnsureSuccessAsync(response, cancellationToken);
 
         var result = await response.Content.ReadFromJsonAsync<T>(
-            VectraJsonOptions.Default,
+            SynentraJsonOptions.Default,
             cancellationToken);
 
         if (result is null)
-            throw new VectraApiException(
+            throw new SynentraApiException(
                 (int)response.StatusCode,
                 $"The server returned an empty response for a {typeof(T).Name} request.");
 
@@ -46,11 +46,11 @@ internal static class HttpResponseExtensions
         var statusCode = (int)response.StatusCode;
 
         // Attempt to parse a structured error body first.
-        VectraApiError? apiError = null;
+        SynentraApiError? apiError = null;
         try
         {
-            apiError = await response.Content.ReadFromJsonAsync<VectraApiError>(
-                VectraJsonOptions.Default,
+            apiError = await response.Content.ReadFromJsonAsync<SynentraApiError>(
+                SynentraJsonOptions.Default,
                 cancellationToken);
         }
         catch (JsonException) { /* fall through to raw message */ }
@@ -63,24 +63,24 @@ internal static class HttpResponseExtensions
                     ? "Authentication failed. Verify the agent ID and client secret."
                     : "Access denied. The authenticated agent does not have permission to perform this action.");
 
-            throw new VectraAuthenticationException(statusCode, msg);
+            throw new SynentraAuthenticationException(statusCode, msg);
         }
 
         if (apiError is not null)
         {
-            var errorWithStatus = new VectraApiError
+            var errorWithStatus = new SynentraApiError
             {
                 Message = apiError.Message,
                 Code = apiError.Code,
                 StatusCode = statusCode,
                 Details = apiError.Details
             };
-            throw new VectraApiException(errorWithStatus);
+            throw new SynentraApiException(errorWithStatus);
         }
 
         // Fallback: read raw text.
         var raw = await response.Content.ReadAsStringAsync(cancellationToken);
-        throw new VectraApiException(statusCode, string.IsNullOrWhiteSpace(raw)
+        throw new SynentraApiException(statusCode, string.IsNullOrWhiteSpace(raw)
             ? $"The server returned HTTP {statusCode}."
             : raw);
     }

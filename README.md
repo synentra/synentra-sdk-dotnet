@@ -1,12 +1,12 @@
-# Vectra SDK for .NET
+# Synentra SDK for .NET
 
-[![NuGet](https://img.shields.io/nuget/v/Vectra.Client.Net.svg)](https://www.nuget.org/packages/Vectra.Client.Net)
+[![NuGet](https://img.shields.io/nuget/v/Synentra.Client.Net.svg)](https://www.nuget.org/packages/Synentra.Client.Net)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![.NET 10](https://img.shields.io/badge/.NET-10.0-purple.svg)](https://dotnet.microsoft.com/download/dotnet/10.0)
 
-Official .NET client library for **Vectra** — the Intent-Aware Governance Gateway for Autonomous AI Agents.
+Official .NET client library for **Synentra** — the Intent-Aware Governance Gateway for Autonomous AI Agents.
 
-Vectra sits between your AI agents and the outside world, enforcing governance policies, intercepting high-risk actions, and routing requests through Human-in-the-Loop (HITL) review when needed. This SDK gives your .NET applications strongly-typed access to every capability Vectra exposes: agent registration, JWT authentication, policy inspection, and HITL review workflows.
+Synentra sits between your AI agents and the outside world, enforcing governance policies, intercepting high-risk actions, and routing requests through Human-in-the-Loop (HITL) review when needed. This SDK gives your .NET applications strongly-typed access to every capability Synentra exposes: agent registration, JWT authentication, policy inspection, and HITL review workflows.
 
 ## Table of Contents
 
@@ -34,9 +34,9 @@ Vectra sits between your AI agents and the outside world, enforcing governance p
 - **JWT Authentication** — Exchange agent credentials for a scoped Bearer token with one call.
 - **Policy Inspection** — List and inspect the governance policies configured in your gateway.
 - **HITL Review Workflows** — Retrieve pending review requests, then approve or deny them programmatically.
-- **First-class DI support** — Single `AddVectraClient(...)` extension wires up all typed HTTP clients.
+- **First-class DI support** — Single `AddSynentraClient(...)` extension wires up all typed HTTP clients.
 - **Automatic Bearer token injection** — Set `BearerToken` once; every outgoing request carries the header.
-- **Structured exceptions** — `VectraApiException` and `VectraAuthenticationException` expose the HTTP status code and the server's error payload.
+- **Structured exceptions** — `SynentraApiException` and `SynentraAuthenticationException` expose the HTTP status code and the server's error payload.
 - **Full cancellation support** — Every async method accepts a `CancellationToken`.
 - **Pagination** — All list operations accept `page` and `pageSize` parameters.
 
@@ -45,25 +45,25 @@ Vectra sits between your AI agents and the outside world, enforcing governance p
 | Requirement | Version |
 |---|---|
 | .NET | 10.0+ |
-| Vectra Gateway | Running and reachable (default: `http://localhost:7080`) |
+| Synentra Gateway | Running and reachable (default: `http://localhost:7080`) |
 
 ## Installation
 
 ```bash
-dotnet add package Vectra.Client.Net
+dotnet add package Synentra.Client.Net
 ```
 
 Or via the NuGet Package Manager:
 
 ```
-Install-Package Vectra.Client.Net
+Install-Package Synentra.Client.Net
 ```
 
 ## Quick Start
 
 ```csharp
 // Program.cs — ASP.NET Core / Generic Host
-builder.Services.AddVectraClient(options =>
+builder.Services.AddSynentraClient(options =>
 {
     options.BaseUrl     = "http://localhost:7080";
     options.BearerToken = "your-jwt-token"; // optional; see Token Authentication
@@ -71,23 +71,23 @@ builder.Services.AddVectraClient(options =>
 ```
 
 ```csharp
-// Any service that needs Vectra
-public class MyService(IVectraClient vectra)
+// Any service that needs Synentra
+public class MyService(ISynentraClient synentra)
 {
     public async Task RunAsync(CancellationToken ct)
     {
         // List registered agents
-        var agents = await vectra.Agents.ListAsync(page: 1, pageSize: 10, ct);
+        var agents = await synentra.Agents.ListAsync(page: 1, pageSize: 10, ct);
         foreach (var agent in agents)
             Console.WriteLine($"[{agent.Status,-8}] {agent.Name}  id={agent.AgentId}");
 
         // List governance policies
-        var policies = await vectra.Policies.ListAsync(cancellationToken: ct);
+        var policies = await synentra.Policies.ListAsync(cancellationToken: ct);
         foreach (var policy in policies)
             Console.WriteLine($"{policy.PolicyName}  owner={policy.Owner}");
 
         // Check the HITL queue
-        var pending = await vectra.Hitl.GetAllPendingAsync(cancellationToken: ct);
+        var pending = await synentra.Hitl.GetAllPendingAsync(cancellationToken: ct);
         Console.WriteLine($"Pending HITL reviews: {pending.Count}");
     }
 }
@@ -95,10 +95,10 @@ public class MyService(IVectraClient vectra)
 
 ## Configuration
 
-Register the SDK with `AddVectraClient` and supply a configuration delegate:
+Register the SDK with `AddSynentraClient` and supply a configuration delegate:
 
 ```csharp
-builder.Services.AddVectraClient(options =>
+builder.Services.AddSynentraClient(options =>
 {
     options.BaseUrl     = "http://localhost:7080"; // required
     options.BearerToken = "<jwt>";                 // optional — injected on every request
@@ -107,61 +107,60 @@ builder.Services.AddVectraClient(options =>
 });
 ```
 
-You can also pass a pre-built `VectraClientOptions` instance (useful when binding from `appsettings.json`):
+You can also pass a pre-built `SynentraClientOptions` instance (useful when binding from `appsettings.json`):
 
 ```csharp
 var opts = builder.Configuration
-    .GetSection("Vectra")
-    .Get<VectraClientOptions>()!;
+    .GetSection("Synentra")
+    .Get<SynentraClientOptions>()!;
 
-builder.Services.AddVectraClient(opts);
+builder.Services.AddSynentraClient(opts);
 ```
 
-### `VectraClientOptions` Properties
+### `SynentraClientOptions` Properties
 
 | Property | Type | Default | Description |
 |---|---|---|---|
-| `BaseUrl` | `string` | *(required)* | Base URL of the Vectra gateway. |
+| `BaseUrl` | `string` | *(required)* | Base URL of the Synentra gateway. |
 | `BearerToken` | `string?` | `null` | Static JWT injected as `Authorization: Bearer <token>`. |
 | `Timeout` | `TimeSpan` | `00:00:30` | Per-request HTTP timeout. |
-| `ThrowOnError` | `bool` | `true` | Throw `VectraApiException` on non-2xx responses. |
+| `ThrowOnError` | `bool` | `true` | Throw `SynentraApiException` on non-2xx responses. |
 
 ## API Reference
 
-All operations are accessed through the `IVectraClient` facade:
+All operations are accessed through the `ISynentraClient` facade:
 
 ```
-IVectraClient
-├── .Agents    → IVectraAgentClient
-├── .Policies  → IVectraPolicyClient
-├── .Hitl      → IVectraHitlClient
-└── .Tokens    → IVectraTokenClient
+├── .Agents    → ISynentraAgentClient
+├── .Policies  → ISynentraPolicyClient
+├── .Hitl      → ISynentraHitlClient
+└── .Tokens    → ISynentraTokenClient
 ```
 
 ### Agent Management
 
 ```csharp
 // List agents (paginated)
-IReadOnlyList<AgentSummary> agents = await vectra.Agents.ListAsync(page: 1, pageSize: 25, ct);
+IReadOnlyList<AgentSummary> agents = await synentra.Agents.ListAsync(page: 1, pageSize: 25, ct);
 
 // Register a new agent
-RegisterAgentResult result = await vectra.Agents.RegisterAsync(new RegisterAgentRequest
+RegisterAgentResult result = await synentra.Agents.RegisterAsync(new RegisterAgentRequest
 {
     Name         = "my-research-agent",
     OwnerId      = "team-backend",
-    ClientSecret = "super-secret-value"   // store securely — Vectra hashes it
+    ClientSecret = "super-secret-value"   // store securely — Synentra hashes it
 }, ct);
 
 Console.WriteLine($"New agent ID: {result.AgentId}");
 
 // Assign a policy to an agent
-await vectra.Agents.AssignPolicyAsync(result.AgentId, new AssignPolicyRequest
+await synentra.Agents.AssignPolicyAsync(result.AgentId, new AssignPolicyRequest
 {
     PolicyName = "strict-outbound"
 }, ct);
 
 // Delete an agent
-await vectra.Agents.DeleteAsync(result.AgentId, ct);
+await synentra.Agents.DeleteAsync(result.AgentId, ct);
 ```
 
 #### `AgentSummary` Properties
@@ -178,7 +177,7 @@ await vectra.Agents.DeleteAsync(result.AgentId, ct);
 Exchange an agent's credentials for a scoped JWT:
 
 ```csharp
-GenerateTokenResult token = await vectra.Tokens.GenerateAsync(new GenerateTokenRequest
+GenerateTokenResult token = await synentra.Tokens.GenerateAsync(new GenerateTokenRequest
 {
     AgentId      = agentId,
     ClientSecret = "super-secret-value"
@@ -192,8 +191,8 @@ optionsMonitor.CurrentValue.BearerToken = token.AccessToken;
 
 ```csharp
 public sealed class TokenRefresher(
-    IVectraClient vectra,
-    IOptionsMonitor<VectraClientOptions> options,
+    ISynentraClient synentra,
+    IOptionsMonitor<SynentraClientOptions> options,
     Guid agentId,
     string clientSecret)
 {
@@ -209,7 +208,7 @@ public sealed class TokenRefresher(
         {
             if (DateTime.UtcNow >= _expiresAt)
             {
-                var result = await vectra.Tokens.GenerateAsync(
+                var result = await synentra.Tokens.GenerateAsync(
                     new GenerateTokenRequest { AgentId = agentId, ClientSecret = clientSecret }, ct);
 
                 options.CurrentValue.BearerToken = result.AccessToken;
@@ -225,10 +224,10 @@ public sealed class TokenRefresher(
 
 ```csharp
 // List all policies (paginated)
-IReadOnlyList<PolicySummary> policies = await vectra.Policies.ListAsync(page: 1, pageSize: 25, ct);
+IReadOnlyList<PolicySummary> policies = await synentra.Policies.ListAsync(page: 1, pageSize: 25, ct);
 
 // Get full policy details including rules
-PolicyDetails details = await vectra.Policies.GetAsync("strict-outbound", ct);
+PolicyDetails details = await synentra.Policies.GetAsync("strict-outbound", ct);
 
 Console.WriteLine($"Policy : {details.Name}");
 Console.WriteLine($"Default: {details.Default}");
@@ -249,27 +248,27 @@ foreach (var rule in details.Rules)
 
 ### Human-in-the-Loop (HITL)
 
-When Vectra intercepts a high-risk agent request it raises a HITL item. Your operators (or automation) can then approve or deny the item, controlling whether the original request is replayed upstream.
+When Synentra intercepts a high-risk agent request it raises a HITL item. Your operators (or automation) can then approve or deny the item, controlling whether the original request is replayed upstream.
 
 ```csharp
 // 1. Get the queue of pending reviews
 IReadOnlyList<PendingHitlRequest> queue =
-    await vectra.Hitl.GetAllPendingAsync(page: 1, pageSize: 25, ct);
+    await synentra.Hitl.GetAllPendingAsync(page: 1, pageSize: 25, ct);
 
 // 2. Inspect a specific item
-HitlStatusResponse status = await vectra.Hitl.GetStatusAsync(queue[0].Id, ct);
+HitlStatusResponse status = await synentra.Hitl.GetStatusAsync(queue[0].Id, ct);
 Console.WriteLine($"Status : {status.Status}");
 Console.WriteLine($"Method : {status.Method}  URL: {status.Url}");
 Console.WriteLine($"Reason : {status.Reason}");
 
 // 3. Approve — gateway replays the request to the upstream service
-await vectra.Hitl.ApproveAsync(queue[0].Id, new ReviewDecisionRequest
+await synentra.Hitl.ApproveAsync(queue[0].Id, new ReviewDecisionRequest
 {
     Comment = "Verified safe by on-call engineer."
 }, ct);
 
 // 4. Deny — gateway permanently blocks the request
-await vectra.Hitl.DenyAsync(queue[0].Id, new ReviewDecisionRequest
+await synentra.Hitl.DenyAsync(queue[0].Id, new ReviewDecisionRequest
 {
     Comment = "Blocked: unexpected data-exfiltration attempt."
 }, ct);
@@ -290,26 +289,26 @@ await vectra.Hitl.DenyAsync(queue[0].Id, new ReviewDecisionRequest
 The SDK uses a structured exception hierarchy:
 
 ```
-VectraException                    (base — all SDK errors)
-├── VectraApiException             (non-2xx HTTP response)
-└── VectraAuthenticationException  (401 / 403 responses)
+SynentraException                    (base — all SDK errors)
+├── SynentraApiException             (non-2xx HTTP response)
+└── SynentraAuthenticationException  (401 / 403 responses)
 ```
 
 ```csharp
 try
 {
-    var policy = await vectra.Policies.GetAsync("unknown-policy", ct);
+    var policy = await synentra.Policies.GetAsync("unknown-policy", ct);
 }
-catch (VectraAuthenticationException ex)
+catch (SynentraAuthenticationException ex)
 {
     // 401 or 403 — re-authenticate or surface to the user
     Console.WriteLine($"Auth error [{ex.StatusCode}]: {ex.Message}");
 }
-catch (VectraApiException ex) when (ex.StatusCode == 404)
+catch (SynentraApiException ex) when (ex.StatusCode == 404)
 {
     Console.WriteLine("Policy not found.");
 }
-catch (VectraApiException ex)
+catch (SynentraApiException ex)
 {
     // All other non-2xx responses
     Console.WriteLine($"API error [{ex.StatusCode}]: {ex.Message}");
@@ -318,7 +317,7 @@ catch (VectraApiException ex)
     if (ex.ApiError is { } err)
         Console.WriteLine($"Server detail: {err.Detail}");
 }
-catch (VectraException ex)
+catch (SynentraException ex)
 {
     // SDK-level error (e.g. serialization, configuration)
     Console.WriteLine($"SDK error: {ex.Message}");
@@ -339,41 +338,41 @@ The SDK integrates with `Microsoft.Extensions.DependencyInjection` and `Microsof
 
 ```csharp
 // Program.cs
-builder.Services.AddVectraClient(options =>
+builder.Services.AddSynentraClient(options =>
 {
-    options.BaseUrl     = builder.Configuration["Vectra:BaseUrl"]!;
-    options.BearerToken = builder.Configuration["Vectra:BearerToken"];
+    options.BaseUrl     = builder.Configuration["Synentra:BaseUrl"]!;
+    options.BearerToken = builder.Configuration["Synentra:BearerToken"];
 });
 ```
 
 ```csharp
 // Inject into any service
-public class AgentOrchestrator(IVectraClient vectra) { ... }
+public class AgentOrchestrator(ISynentraClient synentra) { ... }
 ```
 
 ### Console Application (manual `ServiceCollection`)
 
 ```csharp
 var services = new ServiceCollection();
-services.AddVectraClient(opts =>
+services.AddSynentraClient(opts =>
 {
     opts.BaseUrl     = "http://localhost:7080";
     opts.BearerToken = "<jwt>";
 });
 
 await using var provider = services.BuildServiceProvider();
-var vectra = provider.GetRequiredService<IVectraClient>();
+var synentra = provider.GetRequiredService<ISynentraClient>();
 ```
 
 ### Registered Services
 
 | Interface | Implementation | Lifetime |
 |---|---|---|
-| `IVectraClient` | `VectraClient` | Transient |
-| `IVectraAgentClient` | `AgentClient` | Typed `HttpClient` |
-| `IVectraPolicyClient` | `PolicyClient` | Typed `HttpClient` |
-| `IVectraHitlClient` | `HitlClient` | Typed `HttpClient` |
-| `IVectraTokenClient` | `TokenClient` | Typed `HttpClient` |
+| `ISynentraClient` | `SynentraClient` | Transient |
+| `ISynentraAgentClient` | `AgentClient` | Typed `HttpClient` |
+| `ISynentraPolicyClient` | `PolicyClient` | Typed `HttpClient` |
+| `ISynentraHitlClient` | `HitlClient` | Typed `HttpClient` |
+| `ISynentraTokenClient` | `TokenClient` | Typed `HttpClient` |
 
 ## Advanced Usage
 
@@ -381,7 +380,7 @@ var vectra = provider.GetRequiredService<IVectraClient>();
 
 ```csharp
 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-var agents = await vectra.Agents.ListAsync(cancellationToken: cts.Token);
+var agents = await synentra.Agents.ListAsync(cancellationToken: cts.Token);
 ```
 
 ### Reacting to Option Changes
@@ -389,7 +388,7 @@ var agents = await vectra.Agents.ListAsync(cancellationToken: cts.Token);
 ```csharp
 optionsMonitor.OnChange(opts =>
 {
-    logger.LogInformation("Vectra BearerToken rotated at {Time}", DateTimeOffset.UtcNow);
+    logger.LogInformation("Synentra BearerToken rotated at {Time}", DateTimeOffset.UtcNow);
 });
 ```
 
@@ -398,14 +397,14 @@ optionsMonitor.OnChange(opts =>
 Poll the HITL queue on a timer and auto-approve safe requests:
 
 ```csharp
-public class HitlMonitorService(IVectraClient vectra, ILogger<HitlMonitorService> logger)
+public class HitlMonitorService(ISynentraClient synentra, ILogger<HitlMonitorService> logger)
     : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            var pending = await vectra.Hitl.GetAllPendingAsync(cancellationToken: stoppingToken);
+            var pending = await synentra.Hitl.GetAllPendingAsync(cancellationToken: stoppingToken);
 
             foreach (var request in pending)
             {
@@ -437,7 +436,7 @@ The `examples/` project contains ten annotated runnable examples covering every 
 | 10 | Pagination & Bulk | Iterating large result sets efficiently |
 
 ```bash
-# Make sure the Vectra gateway is running first
+# Make sure the Synentra gateway is running first
 cd examples
 dotnet run
 ```
@@ -447,7 +446,7 @@ Edit `examples/Program.cs` to configure the gateway URL, Bearer token, and which
 ## Running the Tests
 
 ```bash
-dotnet test tests/Vectra.Client.UnitTests
+dotnet test tests/Synentra.Client.UnitTests
 ```
 
 The test suite uses **xUnit** and covers all HTTP clients, the DI extensions, exception types, model validation, and internal helpers via mock HTTP message handlers — no live gateway required.

@@ -1,9 +1,9 @@
-using Vectra.Client.Abstractions;
-using Vectra.Client.Exceptions;
-using Vectra.Client.Models.Agents;
-using Vectra.Client.Models.Tokens;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Exceptions;
+using Synentra.Client.Models.Agents;
+using Synentra.Client.Models.Tokens;
 
-namespace Vectra.Client.Examples;
+namespace Synentra.Client.Examples;
 
 /// <summary>
 /// Example 08 — Full Agent Lifecycle
@@ -22,10 +22,10 @@ namespace Vectra.Client.Examples;
 /// This is a great reference for onboarding scripts or integration tests.
 ///
 /// Prerequisites:
-///   • Vectra gateway running and admin-authenticated (BearerToken set)
+///   • Synentra gateway running and admin-authenticated (BearerToken set)
 ///   • At least one policy configured in the gateway
 /// </summary>
-public sealed class AgentLifecycleExample(IVectraClient vectra)
+public sealed class AgentLifecycleExample(ISynentraClient synentra)
 {
     private const string AgentName   = "lifecycle-demo-agent";
     private const string AgentOwner  = "sdk-examples";
@@ -39,7 +39,7 @@ public sealed class AgentLifecycleExample(IVectraClient vectra)
             // ── Step 1: Register ──────────────────────────────────────────────
             Step(1, "Register the agent");
 
-            var reg = await vectra.Agents.RegisterAsync(new RegisterAgentRequest
+            var reg = await synentra.Agents.RegisterAsync(new RegisterAgentRequest
             {
                 Name         = AgentName,
                 OwnerId      = AgentOwner,
@@ -55,7 +55,7 @@ public sealed class AgentLifecycleExample(IVectraClient vectra)
             Models.Tokens.GenerateTokenResult? tokenResult = null;
             try
             {
-                tokenResult = await vectra.Tokens.GenerateAsync(new GenerateTokenRequest
+                tokenResult = await synentra.Tokens.GenerateAsync(new GenerateTokenRequest
                 {
                     AgentId      = agentId.Value,
                     ClientSecret = agentSecret
@@ -63,7 +63,7 @@ public sealed class AgentLifecycleExample(IVectraClient vectra)
 
                 OK($"Token obtained (length: {tokenResult.AccessToken.Length} chars)");
             }
-            catch (VectraAuthenticationException ex)
+            catch (SynentraAuthenticationException ex)
             {
                 Warn($"Auth failed [{ex.StatusCode}]: {ex.Message}");
                 Warn("Continuing lifecycle demo without token...");
@@ -72,7 +72,7 @@ public sealed class AgentLifecycleExample(IVectraClient vectra)
             // ── Step 3: Verify in list ────────────────────────────────────────
             Step(3, "Verify the agent appears as Active in the list");
 
-            var agents = await vectra.Agents.ListAsync(cancellationToken: ct);
+            var agents = await synentra.Agents.ListAsync(cancellationToken: ct);
             var found  = agents.FirstOrDefault(a => a.AgentId == agentId);
 
             if (found is null)
@@ -89,7 +89,7 @@ public sealed class AgentLifecycleExample(IVectraClient vectra)
             // ── Step 4: Assign a policy ───────────────────────────────────────
             Step(4, "Assign a governance policy");
 
-            var policies = await vectra.Policies.ListAsync(cancellationToken: ct);
+            var policies = await synentra.Policies.ListAsync(cancellationToken: ct);
 
             if (policies.Count == 0)
             {
@@ -98,7 +98,7 @@ public sealed class AgentLifecycleExample(IVectraClient vectra)
             else
             {
                 var policy = policies[0];
-                await vectra.Agents.AssignPolicyAsync(
+                await synentra.Agents.AssignPolicyAsync(
                     agentId.Value,
                     new AssignPolicyRequest { PolicyName = policy.PolicyName },
                     ct);
@@ -111,7 +111,7 @@ public sealed class AgentLifecycleExample(IVectraClient vectra)
                     Step(5, "Upgrade to a stricter policy");
 
                     var stricterPolicy = policies[1];
-                    await vectra.Agents.AssignPolicyAsync(
+                    await synentra.Agents.AssignPolicyAsync(
                         agentId.Value,
                         new AssignPolicyRequest { PolicyName = stricterPolicy.PolicyName },
                         ct);
@@ -126,12 +126,12 @@ public sealed class AgentLifecycleExample(IVectraClient vectra)
                 // ── Step 6: Inspect rules for the assigned policy ─────────────
                 Step(6, "Inspect the assigned policy rules");
 
-                var assignedPolicyName = (await vectra.Agents.ListAsync(cancellationToken: ct))
+                var assignedPolicyName = (await synentra.Agents.ListAsync(cancellationToken: ct))
                     .FirstOrDefault(a => a.AgentId == agentId)?.PolicyName;
 
                 if (assignedPolicyName is not null)
                 {
-                    var details = await vectra.Policies.GetAsync(assignedPolicyName, ct);
+                    var details = await synentra.Policies.GetAsync(assignedPolicyName, ct);
                     Out($"    Policy  : {details.Name}");
                     Out($"    Default : {details.Default}");
                     Out($"    Rules   : {details.Rules.Count}");
@@ -149,7 +149,7 @@ public sealed class AgentLifecycleExample(IVectraClient vectra)
 
             if (confirm is "y" or "yes")
             {
-                await vectra.Agents.DeleteAsync(agentId.Value, ct);
+                await synentra.Agents.DeleteAsync(agentId.Value, ct);
                 OK($"Agent {agentId} deleted.");
                 agentId = null; // prevent double-delete in finally
             }
@@ -163,7 +163,7 @@ public sealed class AgentLifecycleExample(IVectraClient vectra)
             {
                 Step(8, "Verify the agent is gone");
 
-                var afterDelete = await vectra.Agents.ListAsync(cancellationToken: ct);
+                var afterDelete = await synentra.Agents.ListAsync(cancellationToken: ct);
                 var stillThere  = afterDelete.Any(a => a.AgentId == reg.AgentId);
 
                 if (stillThere)
@@ -179,7 +179,7 @@ public sealed class AgentLifecycleExample(IVectraClient vectra)
                 Out("\n    [cleanup] Removing example agent...");
                 try
                 {
-                    await vectra.Agents.DeleteAsync(agentId.Value, ct);
+                    await synentra.Agents.DeleteAsync(agentId.Value, ct);
                     Out("    [cleanup] Done.");
                 }
                 catch (Exception ex)

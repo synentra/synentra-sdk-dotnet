@@ -6,28 +6,28 @@
 	<ImplicitUsings>enable</ImplicitUsings>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<NoWarn>$(NoWarn);1591</NoWarn>
-	<Title>Vectra SDK for .NET</Title>
-	<Description>Official .NET client SDK for the Vectra Intent-Aware Governance Gateway. Provides strongly-typed access to the Vectra API including agent management, policy evaluation, HITL workflows, and token authentication.</Description>
-	<Authors>Cortexium Labs</Authors>
-	<Company>Cortexium Labs</Company>
-	<Copyright>© Cortexium Labs. All rights reserved.</Copyright>
-	<PackageId>Vectra.Client.Net</PackageId>
-	<PackageTags>vectra;ai-governance;agent;sdk;cortexium</PackageTags>
-	<RepositoryUrl>https://github.com/cortexiumlabs/vectra-sdk-dotnet</RepositoryUrl>
-	<PackageProjectUrl>https://cortexiumlabs.com/products/vectra</PackageProjectUrl>
+	<Title>Synentra SDK for .NET</Title>
+	<Description>Official .NET client SDK for the Synentra Intent-Aware Governance Gateway. Provides strongly-typed access to the Synentra API including agent management, policy evaluation, HITL workflows, and token authentication.</Description>
+	<Authors>Synentra</Authors>
+	<Company>Synentra</Company>
+	<Copyright>© Synentra. All rights reserved.</Copyright>
+	<PackageId>Synentra.Client.Net</PackageId>
+	<PackageTags>synentra;ai-governance;agent;sdk;synentra</PackageTags>
+	<RepositoryUrl>https://github.com/synentra/synentra-sdk-dotnet</RepositoryUrl>
+	<PackageProjectUrl>https://synentra.io</PackageProjectUrl>
 	<RepositoryType>git</RepositoryType>
-	<RootNamespace>Vectra.Client</RootNamespace>
-	<AssemblyName>Vectra.Client.Net</AssemblyName>
+	<RootNamespace>Synentra.Client</RootNamespace>
+	<AssemblyName>Synentra.Client.Net</AssemblyName>
 
 	<!-- NuGet presentation -->
 	<PackageIcon>icon.png</PackageIcon>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-	<PackageReleaseNotes>https://github.com/cortexiumlabs/vectra-sdk-dotnet/releases</PackageReleaseNotes>
+	<PackageReleaseNotes>https://github.com/synentra/synentra-sdk-dotnet/releases</PackageReleaseNotes>
 
 	<!-- NuGet Trends / discoverability -->
-	<PackageTags>vectra;ai-governance;agent;sdk;cortexium;hitl;policy;ai-safety;llm;autonomous-agents;dotnet</PackageTags>
+	<PackageTags>synentra;ai-governance;agent;sdk;synentra;hitl;policy;ai-safety;llm;autonomous-agents;dotnet</PackageTags>
 
 	<!-- Source Link / deterministic builds -->
 	<DebugType>portable</DebugType>

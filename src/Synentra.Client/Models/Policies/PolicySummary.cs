@@ -1,4 +1,4 @@
-namespace Vectra.Client.Models.Policies;
+namespace Synentra.Client.Models.Policies;
 
 /// <summary>
 /// Represents a summary of a policy returned in list responses.

@@ -1,13 +1,13 @@
-using Vectra.Client.Exceptions;
+using Synentra.Client.Exceptions;
 
-namespace Vectra.Client.UnitTests.Exceptions;
+namespace Synentra.Client.UnitTests.Exceptions;
 
-public sealed class VectraExceptionTests
+public sealed class SynentraExceptionTests
 {
     [Fact]
     public void Constructor_WithMessage_SetsMessage()
     {
-        var ex = new VectraException("something went wrong");
+        var ex = new SynentraException("something went wrong");
 
         ex.Message.Should().Be("something went wrong");
     }
@@ -16,7 +16,7 @@ public sealed class VectraExceptionTests
     public void Constructor_WithMessageAndInnerException_SetsMessageAndInner()
     {
         var inner = new InvalidOperationException("inner");
-        var ex = new VectraException("outer", inner);
+        var ex = new SynentraException("outer", inner);
 
         ex.Message.Should().Be("outer");
         ex.InnerException.Should().BeSameAs(inner);
@@ -25,7 +25,7 @@ public sealed class VectraExceptionTests
     [Fact]
     public void IsSubclassOfException()
     {
-        var ex = new VectraException("test");
+        var ex = new SynentraException("test");
 
         ex.Should().BeAssignableTo<Exception>();
     }

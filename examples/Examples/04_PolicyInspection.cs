@@ -1,8 +1,8 @@
-using Vectra.Client.Abstractions;
-using Vectra.Client.Exceptions;
-using Vectra.Client.Models.Policies;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Exceptions;
+using Synentra.Client.Models.Policies;
 
-namespace Vectra.Client.Examples;
+namespace Synentra.Client.Examples;
 
 /// <summary>
 /// Example 04 — Policy Inspection
@@ -18,17 +18,17 @@ namespace Vectra.Client.Examples;
 ///   • Handling a 404 for a non-existent policy
 ///
 /// Prerequisites:
-///   • Vectra gateway running and authenticated
+///   • Synentra gateway running and authenticated
 ///   • At least one policy configured in the gateway
 /// </summary>
-public sealed class PolicyInspectionExample(IVectraClient vectra)
+public sealed class PolicyInspectionExample(ISynentraClient synentra)
 {
     public async Task RunAsync(CancellationToken ct = default)
     {
         // ── 1. List all policies ──────────────────────────────────────────────
         Section("1. List all policies");
 
-        var policies = await vectra.Policies.ListAsync(cancellationToken: ct);
+        var policies = await synentra.Policies.ListAsync(cancellationToken: ct);
 
         if (policies.Count == 0)
         {
@@ -48,10 +48,10 @@ public sealed class PolicyInspectionExample(IVectraClient vectra)
         {
             try
             {
-                var details = await vectra.Policies.GetAsync(summary.PolicyName, ct);
+                var details = await synentra.Policies.GetAsync(summary.PolicyName, ct);
                 PrintPolicyDetails(details);
             }
-            catch (VectraApiException ex) when (ex.StatusCode == 404)
+            catch (SynentraApiException ex) when (ex.StatusCode == 404)
             {
                 Out($"  Policy '{summary.PolicyName}' not found (404).");
             }
@@ -75,7 +75,7 @@ public sealed class PolicyInspectionExample(IVectraClient vectra)
         foreach (var summary in policies)
         {
             PolicyDetails details;
-            try { details = await vectra.Policies.GetAsync(summary.PolicyName, ct); }
+            try { details = await synentra.Policies.GetAsync(summary.PolicyName, ct); }
             catch { continue; }
 
             if (details.Rules.Count == 0) continue;
@@ -94,7 +94,7 @@ public sealed class PolicyInspectionExample(IVectraClient vectra)
         {
             try
             {
-                var d = await vectra.Policies.GetAsync(summary.PolicyName, ct);
+                var d = await synentra.Policies.GetAsync(summary.PolicyName, ct);
                 allRules.AddRange(d.Rules);
             }
             catch { /* skip */ }
@@ -112,9 +112,9 @@ public sealed class PolicyInspectionExample(IVectraClient vectra)
 
         try
         {
-            await vectra.Policies.GetAsync("this-policy-does-not-exist", ct);
+            await synentra.Policies.GetAsync("this-policy-does-not-exist", ct);
         }
-        catch (VectraApiException ex) when (ex.StatusCode == 404)
+        catch (SynentraApiException ex) when (ex.StatusCode == 404)
         {
             Out($"  ✓ Caught 404 as expected: {ex.Message}");
         }

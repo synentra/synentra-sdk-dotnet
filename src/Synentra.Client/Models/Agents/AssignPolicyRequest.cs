@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Vectra.Client.Models.Agents;
+namespace Synentra.Client.Models.Agents;
 
 /// <summary>
 /// The request body used to assign a policy to an existing agent.

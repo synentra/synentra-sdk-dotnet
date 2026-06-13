@@ -1,11 +1,11 @@
-using Vectra.Client.Exceptions;
-using Vectra.Client.Http;
-using Vectra.Client.Models.Common;
-using Vectra.Client.Models.Hitl;
-using Vectra.Client.UnitTests.Helpers;
+using Synentra.Client.Exceptions;
+using Synentra.Client.Http;
+using Synentra.Client.Models.Common;
+using Synentra.Client.Models.Hitl;
+using Synentra.Client.UnitTests.Helpers;
 using System.Net;
 
-namespace Vectra.Client.UnitTests.Http;
+namespace Synentra.Client.UnitTests.Http;
 
 public sealed class HitlClientTests
 {
@@ -151,14 +151,14 @@ public sealed class HitlClientTests
     }
 
     [Fact]
-    public async Task DenyAsync_ThrowsVectraAuthenticationException_On403()
+    public async Task DenyAsync_ThrowsSynentraAuthenticationException_On403()
     {
         var handler = new MockHttpMessageHandler(HttpStatusCode.Forbidden);
         var sut = new HitlClient(CreateClient(handler));
 
         var act = () => sut.DenyAsync("req-1");
 
-        await act.Should().ThrowAsync<VectraAuthenticationException>()
+        await act.Should().ThrowAsync<SynentraAuthenticationException>()
             .Where(e => e.StatusCode == 403);
     }
 }

@@ -1,6 +1,6 @@
-using Vectra.Client.Abstractions;
+using Synentra.Client.Abstractions;
 
-namespace Vectra.Client.Examples;
+namespace Synentra.Client.Examples;
 
 /// <summary>
 /// Example 01 — Quick Start
@@ -9,18 +9,18 @@ namespace Vectra.Client.Examples;
 /// Lists agents and policies from the gateway with minimal boilerplate.
 ///
 /// Prerequisites:
-///   • Vectra gateway running at http://localhost:7080
+///   • Synentra gateway running at http://localhost:7080
 ///   • At least one agent and one policy already registered
 ///   • BearerToken set in Program.cs (or run example 02 first)
 /// </summary>
-public sealed class QuickStartExample(IVectraClient vectra)
+public sealed class QuickStartExample(ISynentraClient synentra)
 {
     public async Task RunAsync(CancellationToken ct = default)
     {
-        Out("Connecting to Vectra gateway...");
+        Out("Connecting to Synentra gateway...");
 
         // ── 1. List agents ────────────────────────────────────────────────────
-        var agents = await vectra.Agents.ListAsync(page: 1, pageSize: 10, ct);
+        var agents = await synentra.Agents.ListAsync(page: 1, pageSize: 10, ct);
 
         Section("Agents");
         if (agents.Count == 0)
@@ -34,7 +34,7 @@ public sealed class QuickStartExample(IVectraClient vectra)
         }
 
         // ── 2. List policies ──────────────────────────────────────────────────
-        var policies = await vectra.Policies.ListAsync(page: 1, pageSize: 10, ct);
+        var policies = await synentra.Policies.ListAsync(page: 1, pageSize: 10, ct);
 
         Section("Policies");
         if (policies.Count == 0)
@@ -48,7 +48,7 @@ public sealed class QuickStartExample(IVectraClient vectra)
         }
 
         // ── 3. HITL queue depth ───────────────────────────────────────────────
-        var pending = await vectra.Hitl.GetAllPendingAsync(page: 1, pageSize: 10, ct);
+        var pending = await synentra.Hitl.GetAllPendingAsync(page: 1, pageSize: 10, ct);
 
         Section("HITL Queue");
         Out($"  Pending reviews: {pending.Count}");

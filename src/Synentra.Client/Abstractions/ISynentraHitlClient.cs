@@ -1,11 +1,11 @@
-using Vectra.Client.Models.Hitl;
+using Synentra.Client.Models.Hitl;
 
-namespace Vectra.Client.Abstractions;
+namespace Synentra.Client.Abstractions;
 
 /// <summary>
-/// Provides operations for managing Human-in-the-Loop (HITL) review requests in Vectra.
+/// Provides operations for managing Human-in-the-Loop (HITL) review requests in Synentra.
 /// </summary>
-public interface IVectraHitlClient
+public interface ISynentraHitlClient
 {
     /// <summary>
     /// Retrieves all HITL requests currently awaiting human review.

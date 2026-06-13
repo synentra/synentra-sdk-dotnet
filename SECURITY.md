@@ -1,4 +1,4 @@
-# Vectra SDK for .NET — Security Policy
+# Synentra SDK for .NET — Security Policy
 
 At **Cortexium Labs**, security is a top priority. We are committed to safeguarding our users, 
 their data, and the systems that rely on our software. Rigorous security practices are 
@@ -6,9 +6,9 @@ integrated throughout our software development and release lifecycle to ensure t
 
 ## Reporting a Vulnerability
 
-If you identify a potential security issue or vulnerability in the **Vectra SDK for .NET**, please **report it privately** to our security team:
+If you identify a potential security issue or vulnerability in the **Synentra SDK for .NET**, please **report it privately** to our security team:
 
-📧 **[contact@cortexiumlabs.com](mailto:contact@cortexiumlabs.com)** with the subject line `[VECTRA-SDK] Security Vulnerability`
+📧 **[contact@synentra.io](mailto:contact@synentra.io)** with the subject line `[SYNENTRA-SDK] Security Vulnerability`
 
 > **Important:** Please **do not** create a public issue or pull request, as this may expose the vulnerability before it is resolved.
 
@@ -28,4 +28,4 @@ We handle every report with urgency and transparency:
 4. **Coordinated Disclosure**  
    Once a fix is ready, we will coordinate public disclosure with the reporter and include a detailed changelog in the relevant release notes.
 
-We sincerely appreciate your responsible disclosure and your efforts in helping **keep the Vectra SDK for .NET safe for everyone**.
+We sincerely appreciate your responsible disclosure and your efforts in helping **keep the Synentra SDK for .NET safe for everyone**.

@@ -1,4 +1,4 @@
-namespace Vectra.Client.Models.Hitl;
+namespace Synentra.Client.Models.Hitl;
 
 /// <summary>
 /// Represents the full status information for a HITL request, including pending details when available.

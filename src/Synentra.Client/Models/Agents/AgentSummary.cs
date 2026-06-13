@@ -1,4 +1,4 @@
-namespace Vectra.Client.Models.Agents;
+namespace Synentra.Client.Models.Agents;
 
 /// <summary>
 /// Represents a summary of an AI agent returned in list responses.

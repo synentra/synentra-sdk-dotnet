@@ -1,7 +1,7 @@
-using Vectra.Client.Abstractions;
-using Vectra.Client.Models.Hitl;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Models.Hitl;
 
-namespace Vectra.Client.Examples;
+namespace Synentra.Client.Examples;
 
 /// <summary>
 /// Example 07 — Background HITL Monitor
@@ -20,9 +20,9 @@ namespace Vectra.Client.Examples;
 ///   services.AddHostedService&lt;HitlMonitorService&gt;();
 ///
 /// Prerequisites:
-///   • Vectra gateway running and authenticated
+///   • Synentra gateway running and authenticated
 /// </summary>
-public sealed class BackgroundHitlMonitorExample(IVectraClient vectra)
+public sealed class BackgroundHitlMonitorExample(ISynentraClient synentra)
 {
     public async Task RunAsync(CancellationToken externalCt = default)
     {
@@ -42,7 +42,7 @@ public sealed class BackgroundHitlMonitorExample(IVectraClient vectra)
         });
 
         var monitor = new HitlMonitor(
-            vectra,
+            synentra,
             pollInterval:  TimeSpan.FromSeconds(5),
             onNewRequest:  OnNewRequest,
             onError:       OnMonitorError);
@@ -75,11 +75,11 @@ public sealed class BackgroundHitlMonitorExample(IVectraClient vectra)
 }
 
 /// <summary>
-/// Reusable polling monitor for the Vectra HITL queue.
+/// Reusable polling monitor for the Synentra HITL queue.
 /// Designed to be embedded in a BackgroundService for production use.
 /// </summary>
 public sealed class HitlMonitor(
-    IVectraClient vectra,
+    ISynentraClient synentra,
     TimeSpan pollInterval,
     Action<PendingHitlRequest> onNewRequest,
     Action<Exception, int>? onError = null)
@@ -96,7 +96,7 @@ public sealed class HitlMonitor(
         {
             try
             {
-                var pending = await vectra.Hitl.GetAllPendingAsync(page: 1, pageSize: 10, cancellationToken: ct);
+                var pending = await synentra.Hitl.GetAllPendingAsync(page: 1, pageSize: 10, cancellationToken: ct);
 
                 // Detect and emit new arrivals
                 foreach (var req in pending)

@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Options;
-using Vectra.Client.Abstractions;
-using Vectra.Client.Configuration;
-using Vectra.Client.Exceptions;
-using Vectra.Client.Models.Tokens;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Configuration;
+using Synentra.Client.Exceptions;
+using Synentra.Client.Models.Tokens;
 
-namespace Vectra.Client.Examples;
+namespace Synentra.Client.Examples;
 
 /// <summary>
 /// Example 02 — Token Authentication
@@ -14,17 +14,17 @@ namespace Vectra.Client.Examples;
 ///
 /// Patterns covered:
 ///   • One-shot token generation
-///   • Injecting the token back into VectraClientOptions at runtime
+///   • Injecting the token back into SynentraClientOptions at runtime
 ///   • A reusable token-refresh helper class
 ///   • Handling authentication errors gracefully
 ///
 /// Prerequisites:
-///   • Vectra gateway running
+///   • Synentra gateway running
 ///   • An agent already registered (agent ID + client secret)
 /// </summary>
 public sealed class TokenAuthenticationExample(
-    IVectraClient vectra,
-    IOptionsMonitor<VectraClientOptions> optionsMonitor)
+    ISynentraClient synentra,
+    IOptionsMonitor<SynentraClientOptions> optionsMonitor)
 {
     public async Task RunAsync(string agentSecret, CancellationToken ct = default)
     {
@@ -32,7 +32,7 @@ public sealed class TokenAuthenticationExample(
         Section("1. One-shot token generation");
 
         // We first need an agent ID. Grab the first active agent as an example.
-        var agents = await vectra.Agents.ListAsync(cancellationToken: ct);
+        var agents = await synentra.Agents.ListAsync(cancellationToken: ct);
         if (agents.Count == 0)
         {
             Out("  No agents found. Register an agent first (example 03).");
@@ -44,7 +44,7 @@ public sealed class TokenAuthenticationExample(
 
         try
         {
-            var result = await vectra.Tokens.GenerateAsync(new GenerateTokenRequest
+            var result = await synentra.Tokens.GenerateAsync(new GenerateTokenRequest
             {
                 AgentId      = agent.AgentId,
                 ClientSecret = agentSecret
@@ -56,10 +56,10 @@ public sealed class TokenAuthenticationExample(
             Section("2. Apply token to SDK options");
 
             optionsMonitor.CurrentValue.BearerToken = result.AccessToken;
-            Out("  ✓ BearerToken updated in VectraClientOptions.");
+            Out("  ✓ BearerToken updated in SynentraClientOptions.");
             Out("    All subsequent SDK calls will include: Authorization: Bearer <token>");
         }
-        catch (VectraAuthenticationException ex)
+        catch (SynentraAuthenticationException ex)
         {
             Out($"  ✗ Authentication failed [{ex.StatusCode}]: {ex.Message}");
             Out("    Check that the agentSecret in Program.cs matches the registered secret.");
@@ -74,7 +74,7 @@ public sealed class TokenAuthenticationExample(
         Out("    • Re-fetches automatically when the token expires (configurable)");
         Out("    • Thread-safe via SemaphoreSlim");
 
-        var refresher = new TokenRefresher(vectra, optionsMonitor, agent.AgentId, agentSecret);
+        var refresher = new TokenRefresher(synentra, optionsMonitor, agent.AgentId, agentSecret);
         await refresher.EnsureValidTokenAsync(ct);
         Out("  ✓ TokenRefresher ensured a valid token is active.");
 
@@ -83,21 +83,21 @@ public sealed class TokenAuthenticationExample(
 
         try
         {
-            await vectra.Tokens.GenerateAsync(new GenerateTokenRequest
+            await synentra.Tokens.GenerateAsync(new GenerateTokenRequest
             {
                 AgentId      = agent.AgentId,
                 ClientSecret = "wrong-secret-deliberately"
             }, ct);
         }
-        catch (VectraAuthenticationException ex)
+        catch (SynentraAuthenticationException ex)
         {
-            Out($"  ✓ Caught VectraAuthenticationException as expected:");
+            Out($"  ✓ Caught SynentraAuthenticationException as expected:");
             Out($"      Status : {ex.StatusCode}");
             Out($"      Message: {ex.Message}");
         }
-        catch (VectraApiException ex)
+        catch (SynentraApiException ex)
         {
-            Out($"  ✓ Caught VectraApiException [{ex.StatusCode}]: {ex.Message}");
+            Out($"  ✓ Caught SynentraApiException [{ex.StatusCode}]: {ex.Message}");
         }
     }
 
@@ -115,8 +115,8 @@ public sealed class TokenAuthenticationExample(
 /// Use this in long-running services where tokens can expire.
 /// </summary>
 public sealed class TokenRefresher(
-    IVectraClient vectra,
-    IOptionsMonitor<VectraClientOptions> optionsMonitor,
+    ISynentraClient synentra,
+    IOptionsMonitor<SynentraClientOptions> optionsMonitor,
     Guid agentId,
     string clientSecret)
 {
@@ -124,7 +124,7 @@ public sealed class TokenRefresher(
     private          DateTime      _expiresAt   = DateTime.MinValue;
 
     /// <summary>
-    /// Ensures a valid token is set in <see cref="VectraClientOptions"/>.
+    /// Ensures a valid token is set in <see cref="SynentraClientOptions"/>.
     /// Fetches a new one if none is present or if <paramref name="refreshMargin"/>
     /// before expiry has been reached.
     /// </summary>
@@ -145,7 +145,7 @@ public sealed class TokenRefresher(
             if (DateTime.UtcNow < _expiresAt - margin)
                 return;
 
-            var result = await vectra.Tokens.GenerateAsync(new GenerateTokenRequest
+            var result = await synentra.Tokens.GenerateAsync(new GenerateTokenRequest
             {
                 AgentId      = agentId,
                 ClientSecret = clientSecret
@@ -153,7 +153,7 @@ public sealed class TokenRefresher(
 
             optionsMonitor.CurrentValue.BearerToken = result.AccessToken;
 
-            // Vectra JWTs are typically valid for 1 hour; adjust if your config differs.
+            // Synentra JWTs are typically valid for 1 hour; adjust if your config differs.
             _expiresAt = DateTime.UtcNow.AddHours(1);
         }
         finally

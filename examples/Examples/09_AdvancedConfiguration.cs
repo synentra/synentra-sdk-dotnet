@@ -1,10 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Vectra.Client.Abstractions;
-using Vectra.Client.Configuration;
-using Vectra.Client.Extensions;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Configuration;
+using Synentra.Client.Extensions;
 
-namespace Vectra.Client.Examples;
+namespace Synentra.Client.Examples;
 
 /// <summary>
 /// Example 09 — Advanced Configuration
@@ -18,16 +18,16 @@ namespace Vectra.Client.Examples;
 ///   5. Using multiple named gateway instances (multi-tenant)
 ///
 /// Prerequisites:
-///   • Vectra gateway running
+///   • Synentra gateway running
 /// </summary>
 public sealed class AdvancedConfigurationExample(
-    IVectraClient vectra,
-    IOptionsMonitor<VectraClientOptions> optionsMonitor)
+    ISynentraClient synentra,
+    IOptionsMonitor<SynentraClientOptions> optionsMonitor)
 {
     public async Task RunAsync(CancellationToken ct = default)
     {
         // ── 1. Reading current options ────────────────────────────────────────
-        Section("1. Reading the current VectraClientOptions at runtime");
+        Section("1. Reading the current SynentraClientOptions at runtime");
 
         var current = optionsMonitor.CurrentValue;
         Out($"  BaseUrl    : {current.BaseUrl}");
@@ -54,7 +54,7 @@ public sealed class AdvancedConfigurationExample(
 
         try
         {
-            var agents = await vectra.Agents.ListAsync(cancellationToken: timeoutCts.Token);
+            var agents = await synentra.Agents.ListAsync(cancellationToken: timeoutCts.Token);
             Out($"  ✓ Completed within 3s. Agents returned: {agents.Count}");
         }
         catch (OperationCanceledException)
@@ -63,11 +63,11 @@ public sealed class AdvancedConfigurationExample(
         }
 
         // ── 4. Manually constructing the client (no DI host) ──────────────────
-        Section("4. Manually constructing VectraClient without a DI host");
+        Section("4. Manually constructing SynentraClient without a DI host");
         Out("  Useful for console tools, scripts, or integration tests.\n");
 
         var manualServices = new ServiceCollection();
-        manualServices.AddVectraClient(opts =>
+        manualServices.AddSynentraClient(opts =>
         {
             opts.BaseUrl     = optionsMonitor.CurrentValue.BaseUrl;
             opts.BearerToken = optionsMonitor.CurrentValue.BearerToken;
@@ -75,7 +75,7 @@ public sealed class AdvancedConfigurationExample(
         });
 
         await using var sp = manualServices.BuildServiceProvider();
-        var manualClient = sp.GetRequiredService<IVectraClient>();
+        var manualClient = sp.GetRequiredService<ISynentraClient>();
 
         var manualAgents = await manualClient.Agents.ListAsync(cancellationToken: ct);
         Out($"  ✓ Manual client returned {manualAgents.Count} agent(s).");
@@ -87,7 +87,7 @@ public sealed class AdvancedConfigurationExample(
         Out("""
           optionsMonitor.OnChange(opts =>
           {
-              logger.LogInformation("VectraClientOptions changed — new token applied.");
+              logger.LogInformation("SynentraClientOptions changed — new token applied.");
           });
         """);
 

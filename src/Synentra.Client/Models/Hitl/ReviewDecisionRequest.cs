@@ -1,4 +1,4 @@
-namespace Vectra.Client.Models.Hitl;
+namespace Synentra.Client.Models.Hitl;
 
 /// <summary>
 /// The request body sent when approving or denying a HITL review.

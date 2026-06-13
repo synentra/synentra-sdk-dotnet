@@ -1,4 +1,4 @@
-namespace Vectra.Client.Models.Agents;
+namespace Synentra.Client.Models.Agents;
 
 /// <summary>
 /// The result returned after successfully registering a new agent.

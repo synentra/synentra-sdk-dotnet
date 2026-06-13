@@ -1,14 +1,14 @@
-using Vectra.Client.Configuration;
-using Vectra.Client.Models.Common;
+using Synentra.Client.Configuration;
+using Synentra.Client.Models.Common;
 
-namespace Vectra.Client.UnitTests.Configuration;
+namespace Synentra.Client.UnitTests.Configuration;
 
-public sealed class VectraClientOptionsTests
+public sealed class SynentraClientOptionsTests
 {
     [Fact]
     public void DefaultTimeout_IsThirtySeconds()
     {
-        var options = new VectraClientOptions { BaseUrl = "http://localhost" };
+        var options = new SynentraClientOptions { BaseUrl = "http://localhost" };
 
         options.Timeout.Should().Be(TimeSpan.FromSeconds(30));
     }
@@ -16,7 +16,7 @@ public sealed class VectraClientOptionsTests
     [Fact]
     public void DefaultThrowOnError_IsTrue()
     {
-        var options = new VectraClientOptions { BaseUrl = "http://localhost" };
+        var options = new SynentraClientOptions { BaseUrl = "http://localhost" };
 
         options.ThrowOnError.Should().BeTrue();
     }
@@ -24,7 +24,7 @@ public sealed class VectraClientOptionsTests
     [Fact]
     public void DefaultBearerToken_IsNull()
     {
-        var options = new VectraClientOptions { BaseUrl = "http://localhost" };
+        var options = new SynentraClientOptions { BaseUrl = "http://localhost" };
 
         options.BearerToken.Should().BeNull();
     }
@@ -32,15 +32,15 @@ public sealed class VectraClientOptionsTests
     [Fact]
     public void Properties_CanBeSet()
     {
-        var options = new VectraClientOptions
+        var options = new SynentraClientOptions
         {
-            BaseUrl = "http://vectra:7080",
+            BaseUrl = "http://synentra:7080",
             BearerToken = "tok",
             Timeout = TimeSpan.FromSeconds(60),
             ThrowOnError = false
         };
 
-        options.BaseUrl.Should().Be("http://vectra:7080");
+        options.BaseUrl.Should().Be("http://synentra:7080");
         options.BearerToken.Should().Be("tok");
         options.Timeout.Should().Be(TimeSpan.FromSeconds(60));
         options.ThrowOnError.Should().BeFalse();

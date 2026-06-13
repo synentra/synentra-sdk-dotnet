@@ -1,35 +1,35 @@
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using Vectra.Client.Exceptions;
-using Vectra.Client.Internal;
-using Vectra.Client.Models.Common;
-using Vectra.Client.UnitTests.Helpers;
+using Synentra.Client.Exceptions;
+using Synentra.Client.Internal;
+using Synentra.Client.Models.Common;
+using Synentra.Client.UnitTests.Helpers;
 
-namespace Vectra.Client.UnitTests.Internal;
+namespace Synentra.Client.UnitTests.Internal;
 
 public sealed class HttpResponseExtensionsTests
 {
     [Fact]
     public async Task ReadAsAsync_ReturnsDeserializedObject_OnSuccess()
     {
-        var expected = new VectraApiError { Message = "test", StatusCode = 200 };
+        var expected = new SynentraApiError { Message = "test", StatusCode = 200 };
         var response = MockHttpMessageHandler.CreateResponse(HttpStatusCode.OK, expected);
 
-        var result = await response.ReadAsAsync<VectraApiError>();
+        var result = await response.ReadAsAsync<SynentraApiError>();
 
         result.Message.Should().Be("test");
     }
 
     [Fact]
-    public async Task ReadAsAsync_ThrowsVectraApiException_WhenBodyIsEmpty()
+    public async Task ReadAsAsync_ThrowsSynentraApiException_WhenBodyIsEmpty()
     {
         var response = new HttpResponseMessage(HttpStatusCode.OK)
         {
             Content = new StringContent("null", Encoding.UTF8, "application/json")
         };
 
-        await Assert.ThrowsAsync<VectraApiException>(() => response.ReadAsAsync<VectraApiError>());
+        await Assert.ThrowsAsync<SynentraApiException>(() => response.ReadAsAsync<SynentraApiError>());
     }
 
     [Fact]
@@ -41,34 +41,34 @@ public sealed class HttpResponseExtensionsTests
     }
 
     [Fact]
-    public async Task EnsureSuccessAsync_ThrowsVectraAuthenticationException_On401()
+    public async Task EnsureSuccessAsync_ThrowsSynentraAuthenticationException_On401()
     {
         var response = new HttpResponseMessage(HttpStatusCode.Unauthorized);
 
-        var ex = await Assert.ThrowsAsync<VectraAuthenticationException>(
+        var ex = await Assert.ThrowsAsync<SynentraAuthenticationException>(
             () => response.EnsureSuccessAsync());
 
         ex.StatusCode.Should().Be(401);
     }
 
     [Fact]
-    public async Task EnsureSuccessAsync_ThrowsVectraAuthenticationException_On403()
+    public async Task EnsureSuccessAsync_ThrowsSynentraAuthenticationException_On403()
     {
         var response = new HttpResponseMessage(HttpStatusCode.Forbidden);
 
-        var ex = await Assert.ThrowsAsync<VectraAuthenticationException>(
+        var ex = await Assert.ThrowsAsync<SynentraAuthenticationException>(
             () => response.EnsureSuccessAsync());
 
         ex.StatusCode.Should().Be(403);
     }
 
     [Fact]
-    public async Task EnsureSuccessAsync_ThrowsVectraApiException_WithStructuredError_On400()
+    public async Task EnsureSuccessAsync_ThrowsSynentraApiException_WithStructuredError_On400()
     {
         var errorBody = new { message = "Bad input", code = "BAD_INPUT", statusCode = 400 };
         var response = MockHttpMessageHandler.CreateResponse(HttpStatusCode.BadRequest, errorBody);
 
-        var ex = await Assert.ThrowsAsync<VectraApiException>(
+        var ex = await Assert.ThrowsAsync<SynentraApiException>(
             () => response.EnsureSuccessAsync());
 
         ex.StatusCode.Should().Be(400);
@@ -76,14 +76,14 @@ public sealed class HttpResponseExtensionsTests
     }
 
     [Fact]
-    public async Task EnsureSuccessAsync_ThrowsVectraApiException_WithRawText_WhenBodyIsNotJson()
+    public async Task EnsureSuccessAsync_ThrowsSynentraApiException_WithRawText_WhenBodyIsNotJson()
     {
         var response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
         {
             Content = new StringContent("internal error", Encoding.UTF8, "text/plain")
         };
 
-        var ex = await Assert.ThrowsAsync<VectraApiException>(
+        var ex = await Assert.ThrowsAsync<SynentraApiException>(
             () => response.EnsureSuccessAsync());
 
         ex.StatusCode.Should().Be(500);
@@ -91,11 +91,11 @@ public sealed class HttpResponseExtensionsTests
     }
 
     [Fact]
-    public async Task EnsureSuccessAsync_ThrowsVectraApiException_WithFallbackMessage_WhenBodyIsEmpty()
+    public async Task EnsureSuccessAsync_ThrowsSynentraApiException_WithFallbackMessage_WhenBodyIsEmpty()
     {
         var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
 
-        var ex = await Assert.ThrowsAsync<VectraApiException>(
+        var ex = await Assert.ThrowsAsync<SynentraApiException>(
             () => response.EnsureSuccessAsync());
 
         ex.StatusCode.Should().Be(500);
@@ -103,12 +103,12 @@ public sealed class HttpResponseExtensionsTests
     }
 
     [Fact]
-    public async Task EnsureSuccessAsync_ThrowsVectraAuthenticationException_WithApiErrorMessage_On401()
+    public async Task EnsureSuccessAsync_ThrowsSynentraAuthenticationException_WithApiErrorMessage_On401()
     {
         var errorBody = new { message = "Token expired", statusCode = 401 };
         var response = MockHttpMessageHandler.CreateResponse(HttpStatusCode.Unauthorized, errorBody);
 
-        var ex = await Assert.ThrowsAsync<VectraAuthenticationException>(
+        var ex = await Assert.ThrowsAsync<SynentraAuthenticationException>(
             () => response.EnsureSuccessAsync());
 
         ex.Message.Should().Be("Token expired");

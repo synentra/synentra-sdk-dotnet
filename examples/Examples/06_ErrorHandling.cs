@@ -1,9 +1,9 @@
-using Vectra.Client.Abstractions;
-using Vectra.Client.Exceptions;
-using Vectra.Client.Models.Agents;
-using Vectra.Client.Models.Tokens;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Exceptions;
+using Synentra.Client.Models.Agents;
+using Synentra.Client.Models.Tokens;
 
-namespace Vectra.Client.Examples;
+namespace Synentra.Client.Examples;
 
 /// <summary>
 /// Example 06 — Error Handling Patterns
@@ -12,9 +12,9 @@ namespace Vectra.Client.Examples;
 /// pattern for handling each one in production code.
 ///
 /// Exception hierarchy:
-///   VectraException                    (base — all SDK errors)
-///   ├── VectraApiException             (non-2xx HTTP response)
-///   └── VectraAuthenticationException  (401 / 403 responses)
+///   SynentraException                    (base — all SDK errors)
+///   ├── SynentraApiException             (non-2xx HTTP response)
+///   └── SynentraAuthenticationException  (401 / 403 responses)
 ///
 /// Patterns covered:
 ///   • Catching by HTTP status code (when clause)
@@ -24,7 +24,7 @@ namespace Vectra.Client.Examples;
 ///   • A recommended production-safe wrapper
 ///   • Centralized error logging helper
 /// </summary>
-public sealed class ErrorHandlingExample(IVectraClient vectra)
+public sealed class ErrorHandlingExample(ISynentraClient synentra)
 {
     public async Task RunAsync(CancellationToken ct = default)
     {
@@ -33,9 +33,9 @@ public sealed class ErrorHandlingExample(IVectraClient vectra)
 
         try
         {
-            await vectra.Policies.GetAsync("does-not-exist", ct);
+            await synentra.Policies.GetAsync("does-not-exist", ct);
         }
-        catch (VectraApiException ex) when (ex.StatusCode == 404)
+        catch (SynentraApiException ex) when (ex.StatusCode == 404)
         {
             Out($"  ✓ Caught 404 with when-clause:");
             Out($"      ex.StatusCode : {ex.StatusCode}");
@@ -47,22 +47,22 @@ public sealed class ErrorHandlingExample(IVectraClient vectra)
 
         try
         {
-            await vectra.Tokens.GenerateAsync(new GenerateTokenRequest
+            await synentra.Tokens.GenerateAsync(new GenerateTokenRequest
             {
                 AgentId      = Guid.NewGuid(),   // random unknown agent
                 ClientSecret = "wrong"
             }, ct);
         }
-        catch (VectraAuthenticationException ex) when (ex.StatusCode == 401)
+        catch (SynentraAuthenticationException ex) when (ex.StatusCode == 401)
         {
-            Out($"  ✓ Caught VectraAuthenticationException (401):");
+            Out($"  ✓ Caught SynentraAuthenticationException (401):");
             Out($"      Message: {ex.Message}");
             Out("      Recommended action: prompt user to re-enter credentials.");
         }
-        catch (VectraApiException ex)
+        catch (SynentraApiException ex)
         {
             // Server may return 400 for invalid request instead of 401
-            Out($"  ✓ Caught VectraApiException [{ex.StatusCode}]: {ex.Message}");
+            Out($"  ✓ Caught SynentraApiException [{ex.StatusCode}]: {ex.Message}");
         }
 
         // ── 3. Structured API error body ──────────────────────────────────────
@@ -71,16 +71,16 @@ public sealed class ErrorHandlingExample(IVectraClient vectra)
         try
         {
             // Force a validation error by supplying invalid data
-            await vectra.Agents.RegisterAsync(new RegisterAgentRequest
+            await synentra.Agents.RegisterAsync(new RegisterAgentRequest
             {
                 Name         = "",   // likely triggers a validation error
                 OwnerId      = "owner",
                 ClientSecret = "secret"
             }, ct);
         }
-        catch (VectraApiException ex)
+        catch (SynentraApiException ex)
         {
-            Out($"  Caught VectraApiException [{ex.StatusCode}]");
+            Out($"  Caught SynentraApiException [{ex.StatusCode}]");
 
             if (ex.ApiError is { } error)
             {
@@ -102,9 +102,9 @@ public sealed class ErrorHandlingExample(IVectraClient vectra)
         Out("""
           try
           {
-              await vectra.Agents.DeleteAsync(protectedAgentId);
+              await synentra.Agents.DeleteAsync(protectedAgentId);
           }
-          catch (VectraAuthenticationException ex) when (ex.StatusCode == 403)
+          catch (SynentraAuthenticationException ex) when (ex.StatusCode == 403)
           {
               // The authenticated agent does not have delete permission
               logger.LogWarning("Access denied: {Message}", ex.Message);
@@ -119,9 +119,9 @@ public sealed class ErrorHandlingExample(IVectraClient vectra)
         Out("""
           try
           {
-              await vectra.Agents.ListAsync();
+              await synentra.Agents.ListAsync();
           }
-          catch (VectraApiException ex)
+          catch (SynentraApiException ex)
           {
               // Server responded with an error status
           }
@@ -140,7 +140,7 @@ public sealed class ErrorHandlingExample(IVectraClient vectra)
         Section("6. Recommended production-safe wrapper");
 
         var result = await SafeExecuteAsync(
-            () => vectra.Policies.GetAsync("my-policy", ct),
+            () => synentra.Policies.GetAsync("my-policy", ct),
             fallback: null);
 
         Out($"  Result via SafeExecuteAsync: {(result is null ? "(null — error occurred)" : result.Name)}");
@@ -148,17 +148,17 @@ public sealed class ErrorHandlingExample(IVectraClient vectra)
         // ── 7. Base class catch-all ───────────────────────────────────────────
         Section("7. Base class catch-all");
 
-        Out("  Catch VectraException as a catch-all for any SDK error:");
+        Out("  Catch SynentraException as a catch-all for any SDK error:");
         Out("""
-          catch (VectraException ex)
+          catch (SynentraException ex)
           {
-              logger.LogError(ex, "Vectra SDK error: {Type}", ex.GetType().Name);
+              logger.LogError(ex, "Synentra SDK error: {Type}", ex.GetType().Name);
           }
         """);
     }
 
     /// <summary>
-    /// A production-safe wrapper that returns a fallback value on any Vectra SDK error,
+    /// A production-safe wrapper that returns a fallback value on any Synentra SDK error,
     /// allowing calling code to remain exception-free.
     /// </summary>
     private static async Task<T?> SafeExecuteAsync<T>(
@@ -169,22 +169,22 @@ public sealed class ErrorHandlingExample(IVectraClient vectra)
         {
             return await operation();
         }
-        catch (VectraAuthenticationException ex)
+        catch (SynentraAuthenticationException ex)
         {
             LogError("AUTH", ex.StatusCode, ex.Message);
             return fallback;
         }
-        catch (VectraApiException ex) when (ex.StatusCode == 404)
+        catch (SynentraApiException ex) when (ex.StatusCode == 404)
         {
             // 404s are often expected — log at debug level in real code
             return fallback;
         }
-        catch (VectraApiException ex)
+        catch (SynentraApiException ex)
         {
             LogError("API", ex.StatusCode, ex.Message);
             return fallback;
         }
-        catch (VectraException ex)
+        catch (SynentraException ex)
         {
             LogError("SDK", 0, ex.Message);
             return fallback;

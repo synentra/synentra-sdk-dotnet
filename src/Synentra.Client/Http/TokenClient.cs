@@ -1,14 +1,14 @@
 using System.Net.Http.Json;
-using Vectra.Client.Abstractions;
-using Vectra.Client.Internal;
-using Vectra.Client.Models.Tokens;
+using Synentra.Client.Abstractions;
+using Synentra.Client.Internal;
+using Synentra.Client.Models.Tokens;
 
-namespace Vectra.Client.Http;
+namespace Synentra.Client.Http;
 
 /// <summary>
-/// HTTP implementation of <see cref="IVectraTokenClient"/>.
+/// HTTP implementation of <see cref="ISynentraTokenClient"/>.
 /// </summary>
-internal sealed class TokenClient : IVectraTokenClient
+internal sealed class TokenClient : ISynentraTokenClient
 {
     private readonly HttpClient _http;
 
@@ -27,7 +27,7 @@ internal sealed class TokenClient : IVectraTokenClient
         var response = await _http.PostAsJsonAsync(
             "Tokens",
             request,
-            VectraJsonOptions.Default,
+            SynentraJsonOptions.Default,
             cancellationToken);
 
         return await response.ReadAsAsync<GenerateTokenResult>(cancellationToken);
