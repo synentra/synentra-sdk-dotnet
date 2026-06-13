@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Synentra.Client\Synentra.Client.csproj" />
+    <ProjectReference Include="..\src\Synentra.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>

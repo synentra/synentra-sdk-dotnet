@@ -3,9 +3,9 @@
     <Project Path="examples/Synentra.Client.Examples.csproj" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src/Synentra.Client/Synentra.Client.csproj" />
+    <Project Path="src/Synentra.Client.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/Synentra.Client.UnitTests/Synentra.Client.UnitTests.csproj" Id="c9d2a84f-cfa4-4cc3-9acf-cd96de8aba93" />
+    <Project Path="tests/Synentra.Client.UnitTests.csproj" Id="c9d2a84f-cfa4-4cc3-9acf-cd96de8aba93" />
   </Folder>
 </Solution>
