@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Vectra.Client\Vectra.Client.csproj" />
+    <ProjectReference Include="..\src\Synentra.Client\Synentra.Client.csproj" />
   </ItemGroup>
 
 </Project>
