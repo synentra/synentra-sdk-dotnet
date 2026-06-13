@@ -10,8 +10,8 @@ on:
 
 env:
   DOTNET_VERSION: '10.x'
-  PROJECT_PATH: src/Synentra.Client/Synentra.Client.csproj
-  TEST_PROJECT_PATH: tests/Synentra.Client.UnitTests/Synentra.Client.UnitTests.csproj
+  PROJECT_PATH: src/Synentra.Client.csproj
+  TEST_PROJECT_PATH: tests/Synentra.Client.UnitTests.csproj
   ARTIFACTS_DIR: ./artifacts
   NUGET_SOURCE: https://api.nuget.org/v3/index.json
   RELEASE_VERSION: ${{ github.event.inputs.rel_version }}
