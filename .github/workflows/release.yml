@@ -23,6 +23,7 @@ jobs:
 
     permissions:
       contents: write
+      id-token: write
 
     steps:
       - name: Checkout
@@ -57,12 +58,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish to NuGet.org
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        run: dotnet nuget push ${{ env.ARTIFACTS_DIR }}/*.nupkg --api-key ${{ env.NUGET_API_KEY }} --source ${{ env.NUGET_SOURCE }} --skip-duplicate
+      - name: Authenticate with NuGet (Trusted Publishing)
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USERNAME }}
+
+      - name: Publish Package to NuGet.org
+        run: |
+          dotnet nuget push "${{ env.ARTIFACTS_DIR }}/*.nupkg" \
+            --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}" \
+            --source "${{ env.NUGET_SOURCE }}" \
+            --skip-duplicate
 
       - name: Publish Symbols to NuGet.org
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        run: dotnet nuget push ${{ env.ARTIFACTS_DIR }}/*.snupkg --api-key ${{ env.NUGET_API_KEY }} --source ${{ env.NUGET_SOURCE }} --skip-duplicate
+        run: |
+          dotnet nuget push "${{ env.ARTIFACTS_DIR }}/*.snupkg" \
+            --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}" \
+            --source "${{ env.NUGET_SOURCE }}" \
+            --skip-duplicate
