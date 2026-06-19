@@ -25,7 +25,7 @@ public class ProxyClientTests
         Assert.NotNull(result);
         Assert.Equal("ok", result["status"]?.GetValue<string>());
         Assert.Single(handler.Requests);
-        Assert.Equal("http://localhost/my-command", handler.Requests[0].RequestUri?.ToString());
+        Assert.Equal("http://localhost/proxy/my-command", handler.Requests[0].RequestUri?.ToString());
         Assert.Equal(HttpMethod.Post, handler.Requests[0].Method);
     }
 
