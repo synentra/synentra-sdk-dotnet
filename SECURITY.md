@@ -1,6 +1,6 @@
 # Synentra SDK for .NET — Security Policy
 
-At **Cortexium Labs**, security is a top priority. We are committed to safeguarding our users, 
+At **Synentra**, security is a top priority. We are committed to safeguarding our users, 
 their data, and the systems that rely on our software. Rigorous security practices are 
 integrated throughout our software development and release lifecycle to ensure the highest level of protection.
 
