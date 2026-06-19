@@ -37,7 +37,9 @@ public sealed class HttpResponseExtensionsTests
     {
         var response = new HttpResponseMessage(HttpStatusCode.OK);
 
-        await response.EnsureSuccessAsync(); // should not throw
+        await response.EnsureSuccessAsync();
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Fact]
