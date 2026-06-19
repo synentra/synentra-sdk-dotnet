@@ -95,11 +95,7 @@ public static class ServiceCollectionExtensions
     {
         var options = sp.GetRequiredService<IOptions<SynentraClientOptions>>().Value;
 
-        var baseUrl = new Uri(options.BaseUrl.EndsWith("/") 
-            ? options.BaseUrl 
-            : options.BaseUrl + "/").ToString();
-
-        client.BaseAddress = new Uri(baseUrl);
+        client.BaseAddress = new Uri(options.BaseUrl, UriKind.Absolute);
         client.Timeout = options.Timeout;
         client.DefaultRequestHeaders.Add("Accept", "application/json");
     }
