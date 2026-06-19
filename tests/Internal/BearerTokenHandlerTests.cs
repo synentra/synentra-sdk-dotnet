@@ -9,10 +9,9 @@ namespace Synentra.Client.UnitTests.Internal;
 
 public sealed class BearerTokenHandlerTests
 {
-    private static IOptionsMonitor<SynentraClientOptions> CreateMonitor(SynentraClientOptions options)
+    private static StaticOptionsMonitor CreateMonitor(SynentraClientOptions options)
     {
-        var monitor = new StaticOptionsMonitor(options);
-        return monitor;
+        return new StaticOptionsMonitor(options);
     }
 
     private static HttpClient BuildPipeline(MockHttpMessageHandler innerHandler, SynentraClientOptions options)
