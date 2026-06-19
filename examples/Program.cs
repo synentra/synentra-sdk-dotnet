@@ -50,6 +50,7 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddTransient<AgentLifecycleExample>();
         services.AddTransient<AdvancedConfigurationExample>();
         services.AddTransient<PaginationAndBulkExample>();
+        services.AddTransient<ProxyCommandExample>();
     })
     .Build();
 
@@ -66,6 +67,7 @@ var examples = new (string Label, Func<Task> Run)[]
     ("Full Agent Lifecycle",           () => host.Services.GetRequiredService<AgentLifecycleExample>().RunAsync(AgentSecret)),
     ("Advanced Configuration",         () => host.Services.GetRequiredService<AdvancedConfigurationExample>().RunAsync()),
     ("Pagination & Bulk Operations",   () => host.Services.GetRequiredService<PaginationAndBulkExample>().RunAsync()),
+    ("Proxy Command",                  () => host.Services.GetRequiredService<ProxyCommandExample>().RunAsync())
 };
 
 while (true)
