@@ -60,6 +60,11 @@ public static class ServiceCollectionExtensions
             .ConfigureHttpClient(ConfigureClient)
             .AddHttpMessageHandler<BearerTokenHandler>();
 
+        services
+            .AddHttpClient<ISynentraProxyClient, ProxyClient>()
+            .ConfigureHttpClient(ConfigureClient)
+            .AddHttpMessageHandler<BearerTokenHandler>();
+
         services.AddTransient<ISynentraClient, SynentraClient>();
 
         return services;

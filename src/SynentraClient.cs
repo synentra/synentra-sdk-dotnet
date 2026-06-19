@@ -23,6 +23,9 @@ public sealed class SynentraClient : ISynentraClient
     /// <inheritdoc />
     public ISynentraTokenClient Tokens { get; }
 
+    /// <inheritdoc />
+    public ISynentraProxyClient Proxy { get; }
+
     /// <summary>
     /// Initializes a new <see cref="SynentraClient"/> with injected sub-clients.
     /// </summary>
@@ -30,11 +33,13 @@ public sealed class SynentraClient : ISynentraClient
         ISynentraAgentClient agents,
         ISynentraPolicyClient policies,
         ISynentraHitlClient hitl,
-        ISynentraTokenClient tokens)
+        ISynentraTokenClient tokens,
+        ISynentraProxyClient proxy)
     {
         Agents = agents;
         Policies = policies;
         Hitl = hitl;
         Tokens = tokens;
+        Proxy = proxy;
     }
 }

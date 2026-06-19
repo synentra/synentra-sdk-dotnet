@@ -27,4 +27,7 @@ public interface ISynentraClient
 
     /// <summary>Gets the client for obtaining JWT access tokens.</summary>
     ISynentraTokenClient Tokens { get; }
+
+    /// <summary>Gets the client for executing proxy commands.</summary>
+    ISynentraProxyClient Proxy { get; }
 }
