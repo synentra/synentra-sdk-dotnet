@@ -462,4 +462,4 @@ Please follow the existing code style (nullable reference types enabled, `requir
 
 ## License
 
-© Cortexium Labs. Licensed under the [Apache License, Version 2.0](LICENSE).
+© Synentra. Licensed under the [Apache License, Version 2.0](LICENSE).
