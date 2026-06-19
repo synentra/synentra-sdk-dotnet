@@ -34,7 +34,7 @@ public sealed class BearerTokenHandlerTests
 
         inner.Requests[0].Headers.Authorization.Should().NotBeNull();
         inner.Requests[0].Headers.Authorization!.Scheme.Should().Be("Bearer");
-        inner.Requests[0].Headers.Authorization.Parameter.Should().Be("test-token");
+        inner.Requests[0].Headers?.Authorization?.Parameter.Should().Be("test-token");
     }
 
     [Fact]

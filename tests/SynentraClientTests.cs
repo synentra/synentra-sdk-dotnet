@@ -16,13 +16,15 @@ public sealed class SynentraClientTests
         var policies = new StubPolicyClient();
         var hitl = new StubHitlClient();
         var tokens = new StubTokenClient();
+        var proxy = new StubProxyClient();
 
-        var sut = new SynentraClient(agents, policies, hitl, tokens);
+        var sut = new SynentraClient(agents, policies, hitl, tokens, proxy);
 
         sut.Agents.Should().BeSameAs(agents);
         sut.Policies.Should().BeSameAs(policies);
         sut.Hitl.Should().BeSameAs(hitl);
         sut.Tokens.Should().BeSameAs(tokens);
+        sut.Proxy.Should().BeSameAs(proxy);
     }
 
     [Fact]
@@ -32,7 +34,8 @@ public sealed class SynentraClientTests
             new StubAgentClient(),
             new StubPolicyClient(),
             new StubHitlClient(),
-            new StubTokenClient());
+            new StubTokenClient(),
+            new StubProxyClient());
 
         sut.Should().BeAssignableTo<ISynentraClient>();
     }
@@ -75,5 +78,16 @@ public sealed class SynentraClientTests
     {
         public Task<GenerateTokenResult> GenerateAsync(GenerateTokenRequest request, CancellationToken cancellationToken = default)
             => Task.FromResult(new GenerateTokenResult());
+    }
+
+    private sealed class StubProxyClient : ISynentraProxyClient
+    {
+        public Task<System.Text.Json.Nodes.JsonNode?> ExecuteAsync(
+            string path, 
+            string method, 
+            System.Text.Json.Nodes.JsonNode payload, 
+            Dictionary<string, string>? headers = null,
+            CancellationToken cancellationToken = default)
+            => Task.FromResult<System.Text.Json.Nodes.JsonNode?>(new System.Text.Json.Nodes.JsonObject());
     }
 }
