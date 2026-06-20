@@ -98,5 +98,8 @@ public static class ServiceCollectionExtensions
         client.BaseAddress = new Uri(options.BaseUrl, UriKind.Absolute);
         client.Timeout = options.Timeout;
         client.DefaultRequestHeaders.Add("Accept", "application/json");
+
+        var version = typeof(SynentraClient).Assembly.GetName().Version?.ToString() ?? "1.0.0";
+        client.DefaultRequestHeaders.UserAgent.ParseAdd($"SynentraSDK/{version}");
     }
 }
